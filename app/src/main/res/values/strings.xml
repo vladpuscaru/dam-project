@@ -1,6 +1,11 @@
 <resources>
     <string name="app_name">DamProject</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="menu_item_home">Acasa</string>
+    <string name="menu_item_journal">Jurnal</string>
+    <string name="menu_item_history">Istorie</string>
+    <string name="menu_item_settings">Setari</string>
+    <string name="login_et_name">username</string>
+    <string name="login_et_password">password</string>
+    <string name="login_btn_submit">Submit</string>
+
 </resources>
