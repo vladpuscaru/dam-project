@@ -4,4 +4,9 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="login_horizontal_padding">48dp</dimen>
     <dimen name="login_vertical_padding">48dp</dimen>
+    <dimen name="login_footer_text_size">11sp</dimen>
+    <dimen name="home_user_info_tv_margin">12dp</dimen>
+    <dimen name="home_section_padding">24dp</dimen>
+    <dimen name="home_section_title_size">24sp</dimen>
+    <dimen name="home_subsection_title_size">18sp</dimen>
 </resources>

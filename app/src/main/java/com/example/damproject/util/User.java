@@ -12,6 +12,14 @@ public class User implements Parcelable {
         this.password = password;
     }
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "name='" + name + '\'' +
+                ", password='" + password + '\'' +
+                '}';
+    }
+
     protected User(Parcel in) {
         name = in.readString();
         password = in.readString();

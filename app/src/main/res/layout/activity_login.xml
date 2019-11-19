@@ -1,45 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:ignore="Autofill"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LoginActivity"
-    android:paddingRight="@dimen/login_horizontal_padding"
     android:paddingLeft="@dimen/login_horizontal_padding"
     android:paddingTop="@dimen/login_vertical_padding"
-    android:paddingBottom="@dimen/login_vertical_padding">
+    android:paddingRight="@dimen/login_horizontal_padding"
+    android:paddingBottom="@dimen/login_vertical_padding"
+    tools:context=".LoginActivity"
+    tools:ignore="Autofill">
+
+
+    <ImageView
+        android:id="@+id/login_img_logo"
+        android:layout_width="118dp"
+        android:layout_height="83dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:contentDescription="@string/app_name"
+        app:srcCompat="@drawable/app_logo" />
+
 
     <EditText
         android:id="@+id/login_et_username"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/login_et_name"
-        android:inputType="text"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_centerVertical="true"
+        android:hint="@string/login_et_username_hint"
+        android:inputType="text" />
 
     <EditText
         android:id="@+id/login_et_password"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/login_et_password"
-        android:inputType="textPassword"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/login_et_username" />
+        android:layout_below="@id/login_et_username"
+        android:hint="@string/login_et_password_hint"
+        android:inputType="textPassword" />
 
     <Button
-        android:id="@+id/login_btn_submit"
+        android:id="@+id/login_btn_forgot_password"
+        style="?android:attr/borderlessButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/login_btn_submit"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        android:layout_below="@+id/login_et_password"
+        android:background="@null"
+        android:text="@string/login_btn_forgot_password"
+        android:textSize="@dimen/login_footer_text_size"/>
+
+    <Button
+        android:id="@+id/login_btn_register"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/login_et_password"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerHorizontal="true"
+        android:background="@null"
+        android:text="@string/login_btn_register"
+        android:textSize="@dimen/login_footer_text_size" />
+
+    <Button
+        android:id="@+id/login_btn_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/login_btn_register"
+        android:layout_centerHorizontal="true"
+        android:text="@string/login_btn_login" />
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <TextView
+        android:id="@+id/login_tv_footer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:text="@string/copy"
+        android:textSize="@dimen/login_footer_text_size" />
+
+
+</RelativeLayout>

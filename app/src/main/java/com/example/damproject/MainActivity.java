@@ -2,7 +2,9 @@ package com.example.damproject;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.damproject.fragments.HistoryFragment;
 import com.example.damproject.fragments.HomeFragment;
@@ -22,9 +24,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final String USERS_KEY = "dom.example.damproject.USERS_KEY";
-
-    private ArrayList<User> users = new ArrayList<>();
+    private User loggedUser;
 
     private Fragment currentFragment;
     private BottomNavigationView bottomNavigationView;
@@ -36,12 +36,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         initComponents();
 
-        if (savedInstanceState == null) {
-            Intent intent = new Intent(this, LoginActivity.class);
-            intent.putParcelableArrayListExtra(USERS_KEY, users);
-            startActivity(intent);
-        }
-
         openDefaultFragment(savedInstanceState);
     }
 
@@ -49,9 +43,8 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(navListener);
 
-        // TODO: Change this to take data from the database
-        User mainUser = new User("admin", "admin");
-        users.add(mainUser);
+        Bundle bundle = getIntent().getExtras();
+        loggedUser = bundle.getParcelable(LoginActivity.USER_KEY);
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener navListener =
@@ -96,6 +89,9 @@ public class MainActivity extends AppCompatActivity {
 
     private Fragment createHomeFragment() {
         Fragment fragment = new HomeFragment();
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(LoginActivity.USER_KEY, loggedUser);
+        fragment.setArguments(bundle);
         return fragment;
     }
 

@@ -7,5 +7,20 @@
     <string name="login_et_name">username</string>
     <string name="login_et_password">password</string>
     <string name="login_btn_submit">Submit</string>
+    <string name="copy">© 2019 Vlad Puscaru. FAPA - Fit As A Plant. All rights reserverd</string>
+    <string name="login_et_username_hint">Username</string>
+    <string name="login_et_password_hint">Password</string>
+    <string name="login_btn_login">Log in</string>
+    <string name="login_btn_register">Register</string>
+    <string name="login_btn_forgot_password">Forgot password</string>
 
+    <!-- TODO: Delete test_text before finishing  -->
+    <string name="test_text">Lorem ipsum</string>
+    <!--    -->
+
+    <string name="home_section_2_title">TODAY\'S TRACK</string>
+    <string name="home_subsection_food_title">FOOD</string>
+    <string name="home_subsection_food_button">+</string>
+    <string name="home_btn_subsection_food_breakfast">BF</string>
+    <string name="home_btn_subsection_food_lunch">LN</string>
 </resources>

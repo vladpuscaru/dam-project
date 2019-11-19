@@ -6,9 +6,200 @@
     android:layout_height="match_parent"
     tools:context=".fragments.HomeFragment">
 
-    <TextView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="home fragment" />
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:id="@+id/home_section_user_info"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="@dimen/home_section_padding"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/home_img_user"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:src="@mipmap/ic_launcher_round" />
+
+            <TextView
+                android:id="@+id/home_tv_user_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/home_user_info_tv_margin"
+                android:layout_marginLeft="@dimen/home_user_info_tv_margin"
+                android:layout_toEndOf="@+id/home_img_user"
+                android:layout_toRightOf="@+id/home_img_user"
+                android:text="@string/test_text" />
+
+            <TextView
+                android:id="@+id/home_tv_user_age"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/home_tv_user_name"
+                android:layout_marginStart="@dimen/home_user_info_tv_margin"
+                android:layout_marginLeft="@dimen/home_user_info_tv_margin"
+                android:layout_toEndOf="@+id/home_img_user"
+                android:layout_toRightOf="@+id/home_img_user"
+                android:text="@string/test_text" />
+
+            <TextView
+                android:id="@+id/home_tv_user_kg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/home_tv_user_name"
+                android:layout_marginStart="@dimen/home_user_info_tv_margin"
+                android:layout_marginLeft="@dimen/home_user_info_tv_margin"
+                android:layout_toEndOf="@+id/home_tv_user_age"
+                android:layout_toRightOf="@+id/home_tv_user_age"
+                android:text="@string/test_text" />
+        </RelativeLayout>
+
+        <View
+            android:id="@+id/home_divider_1"
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:background="?android:attr/listDivider"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/home_section_user_info" />
+
+        <LinearLayout
+            android:id="@+id/home_section_today_track"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="@dimen/home_section_padding"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/home_divider_1">
+
+
+            <TextView
+                android:id="@+id/home_tv_section_2_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/home_section_2_title"
+                android:textSize="@dimen/home_section_title_size" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/home_subsection_food"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:id="@+id/home_subsection_food_section_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/home_tv_subsection_food_title"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@color/colorButton"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="@dimen/home_section_padding"
+                        android:text="@string/home_subsection_food_title"
+                        android:textSize="@dimen/home_subsection_title_size" />
+
+                    <Button
+                        android:id="@+id/home_btn_subsection_food_add_button"
+                        style="?android:attr/borderlessButtonStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/colorButton"
+                        android:text="@string/home_subsection_food_button" />
+                </LinearLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/home_subsection_food_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/home_subsection_food_section_title">
+
+                    <HorizontalScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent">
+
+
+                            <Button
+                                android:id="@+id/home_btn_subsection_food_breakfast"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/home_user_info_tv_margin"
+                                android:layout_marginLeft="@dimen/home_user_info_tv_margin"
+                                android:text="@string/home_btn_subsection_food_breakfast"
+                                app:layout_constraintLeft_toLeftOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <Button
+                                android:id="@+id/home_btn_subsection_food_lunch"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/home_user_info_tv_margin"
+                                android:layout_marginLeft="@dimen/home_user_info_tv_margin"
+                                android:text="@string/home_btn_subsection_food_lunch"
+                                app:layout_constraintLeft_toRightOf="@id/home_btn_subsection_food_breakfast"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <Button
+                                android:id="@+id/home_btn_subsection_food_dinner"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/home_user_info_tv_margin"
+                                android:layout_marginLeft="@dimen/home_user_info_tv_margin"
+                                android:text="@string/home_btn_subsection_food_breakfast"
+                                app:layout_constraintLeft_toRightOf="@+id/home_btn_subsection_food_lunch"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <Button
+                                android:id="@+id/home_btn_subsection_food_snacks"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/home_user_info_tv_margin"
+                                android:layout_marginLeft="@dimen/home_user_info_tv_margin"
+                                android:text="@string/home_btn_subsection_food_breakfast"
+                                app:layout_constraintLeft_toRightOf="@+id/home_btn_subsection_food_dinner"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    </HorizontalScrollView>
+
+                    <ListView
+                        android:id="@+id/home_lv_subsection_food"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                    </ListView>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/home_divider_2"
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:background="?android:attr/listDivider"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/home_section_today_track" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </ScrollView>
