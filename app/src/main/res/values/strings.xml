@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">DamProject</string>
+    <string name="app_name">FAPA - Fit As A Plant</string>
     <string name="menu_item_home">Acasa</string>
     <string name="menu_item_journal">Jurnal</string>
     <string name="menu_item_history">Istorie</string>
@@ -14,6 +14,8 @@
     <string name="login_btn_register">Register</string>
     <string name="login_btn_forgot_password">Forgot password</string>
 
+    <string name="empty_string"></string>
+
     <!-- TODO: Delete test_text before finishing  -->
     <string name="test_text">Lorem ipsum</string>
     <!--    -->
@@ -21,6 +23,42 @@
     <string name="home_section_2_title">TODAY\'S TRACK</string>
     <string name="home_subsection_food_title">FOOD</string>
     <string name="home_subsection_food_button">+</string>
-    <string name="home_btn_subsection_food_breakfast">BF</string>
-    <string name="home_btn_subsection_food_lunch">LN</string>
+    <string name="home_btn_subsection_food_breakfast">BREAKFAST</string>
+    <string name="home_btn_subsection_food_lunch">LUNCH</string>
+    <string name="home_btn_subsection_food_dinner">DINNER</string>
+    <string name="home_btn_subsection_food_snacks">SNACKS</string>
+    <string name="register_input_username_label">Username</string>
+    <string name="register_input_password_label">Password</string>
+    <string name="register_input_confirm_password_label">Confirm password</string>
+    <string name="register_section_account_info_title">Account Info</string>
+    <string name="register_section_personal_info_title">Personal Info</string>
+    <string name="register_input_birthday_label">Birthday</string>
+    <string name="register_input_weight_label">Weight</string>
+    <string name="register_input_height_label">Height</string>
+    <string name="register_input_image">Avatar</string>
+    <string name="register_btn_register">Register</string>
+    <string name="add_food_name_label">Name</string>
+    <string name="add_food_ingredients_title">Ingredients</string>
+    <string name="add_food_ingredients_choose_label">Choose</string>
+    <string name="add_food_ingredients_btn_choose">Choose</string>
+    <string name="add_food_ingredients_btn_create">Create</string>
+    <string name="add_food_ingredients_create_name_label">Name</string>
+    <string name="add_food_ingredients_create_calories_label">Calories</string>
+    <string name="add_food_ingredients_create_carbohydrates_label">Carbohydrates</string>
+    <string name="add_food_ingredients_create_fat_label">Fat</string>
+    <string name="add_food_ingredients_create_protein_label">Protein</string>
+    <string name="add_food_ingredients_btn_label">ADD INGREDIENT</string>
+    <string name="add_food_btn_label">SUBMIT</string>
+    <string name="test_number">28</string>
+
+    <string-array name="weights_array">
+        <item>kg</item>
+        <item>pounds</item>
+    </string-array>
+
+    <string-array name="heights_array">
+        <item>cm</item>
+        <item>inches</item>
+        <item>feet</item>
+    </string-array>
 </resources>

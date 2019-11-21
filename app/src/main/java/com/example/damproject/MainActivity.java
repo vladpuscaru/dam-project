@@ -2,6 +2,7 @@ package com.example.damproject;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -23,6 +24,9 @@ import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
+    public static final String DATE_FORMAT = "dd-MM-yyyy";
+    public final static String USERS_FILE = "files.user.bin";
+
 
     private User loggedUser;
 
@@ -35,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initComponents();
+
+
 
         openDefaultFragment(savedInstanceState);
     }

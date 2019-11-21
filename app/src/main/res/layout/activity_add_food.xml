@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/home_section_padding"
+    tools:context=".AddFoodActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <!-- Food Name -->
+        <LinearLayout
+            android:id="@+id/add_food_input_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="@string/add_food_name_label"
+                android:textSize="@dimen/register_text_size" />
+
+            <EditText
+                android:id="@+id/add_food_et_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:inputType="text"
+                android:textSize="@dimen/register_text_size" />
+
+        </LinearLayout>
+
+        <!-- Ingredients -->
+        <LinearLayout
+            android:id="@+id/add_food_input_ingredients"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/add_food_input_name"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/add_food_ingredients_title"
+                android:textAlignment="center"
+                android:textSize="@dimen/home_subsection_title_size" />
+
+            <LinearLayout
+                style="?android:attr/buttonBarStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/add_food_btn_create_ingredient"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/add_food_ingredients_btn_create" />
+
+                <Button
+                    android:id="@+id/add_food_btn_choose_ingredient"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/add_food_ingredients_btn_choose" />
+
+            </LinearLayout>
+
+            <!-- Choose -->
+            <LinearLayout
+                android:id="@+id/add_food_input_ingredients_choose"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="@string/add_food_ingredients_choose_label" />
+
+                    <Spinner
+                        android:id="@+id/add_food_spn_ingredients"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+            <!-- Create -->
+            <LinearLayout
+                android:id="@+id/add_food_input_ingredients_create"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="@string/add_food_ingredients_create_name_label"
+                        android:textSize="@dimen/register_text_size" />
+
+                    <EditText
+                        android:id="@+id/add_food_ingredient_et_name"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:inputType="text"
+                        android:textSize="@dimen/register_text_size" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="@string/add_food_ingredients_create_calories_label"
+                        android:textSize="@dimen/register_text_size" />
+
+                    <EditText
+                        android:id="@+id/add_food_ingredient_et_calories"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:inputType="number"
+                        android:textSize="@dimen/register_text_size" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="@string/add_food_ingredients_create_carbohydrates_label"
+                        android:textSize="@dimen/register_text_size" />
+
+                    <EditText
+                        android:id="@+id/add_food_ingredient_et_carbohydrates"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:inputType="number"
+                        android:textSize="@dimen/register_text_size" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="@string/add_food_ingredients_create_fat_label"
+                        android:textSize="@dimen/register_text_size" />
+
+                    <EditText
+                        android:id="@+id/add_food_ingredient_et_fats"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:inputType="number"
+                        android:textSize="@dimen/register_text_size" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="@string/add_food_ingredients_create_protein_label"
+                        android:textSize="@dimen/register_text_size" />
+
+                    <EditText
+                        android:id="@+id/add_food_ingredient_et_proteins"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:inputType="number"
+                        android:textSize="@dimen/register_text_size" />
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <!-- Ingredient Error Message -->
+            <TextView
+                android:id="@+id/add_food_input_ingredients_error"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/adapter_ingredient_margin_title"
+                android:layout_marginBottom="@dimen/adapter_ingredient_margin_title"
+                android:textColor="@android:color/holo_red_dark"
+                android:textSize="@dimen/register_error_text_size" />
+
+            <Button
+                android:id="@+id/add_food_btn_add_ingredient"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorButton"
+                android:text="@string/add_food_ingredients_btn_label" />
+
+            <!-- Ingredients List -->
+            <ListView
+                android:id="@+id/add_food_lv_ingredients"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/home_section_padding" />
+
+        </LinearLayout>
+
+        <!-- Food Error Message -->
+        <TextView
+            android:id="@+id/add_food_input_error"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/add_food_input_ingredients"
+            android:textColor="@android:color/holo_red_dark"
+            android:textSize="@dimen/register_error_text_size" />
+
+        <!-- Submit Button -->
+        <Button
+            android:id="@+id/add_food_btn_submit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/add_food_input_error"
+            android:text="@string/add_food_btn_label" />
+
+    </RelativeLayout>
+
+
+</ScrollView>

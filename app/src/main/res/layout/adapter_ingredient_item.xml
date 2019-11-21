@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingTop="@dimen/adapter_ingredient_padding_vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/adapter_ingredient_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/adapter_ingredient_margin_title"
+            android:layout_marginRight="@dimen/adapter_ingredient_margin_title"
+            android:layout_weight="1"
+            android:text="@string/test_text"
+            android:textSize="@dimen/register_text_size" />
+
+        <TextView
+            android:id="@+id/adapter_ingredient_calories"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/adapter_ingredient_margin_element"
+            android:layout_marginRight="@dimen/adapter_ingredient_margin_element"
+            android:text="@string/test_number"
+            android:textColor="@color/colorCalories"
+            android:textSize="@dimen/register_text_size" />
+
+        <TextView
+            android:id="@+id/adapter_ingredient_carbohydrates"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/adapter_ingredient_margin_element"
+            android:layout_marginRight="@dimen/adapter_ingredient_margin_element"
+            android:text="@string/test_number"
+            android:textColor="@color/colorCarbohydrates"
+            android:textSize="@dimen/register_text_size" />
+
+        <TextView
+            android:id="@+id/adapter_ingredient_fat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/adapter_ingredient_margin_element"
+            android:layout_marginRight="@dimen/adapter_ingredient_margin_element"
+            android:text="@string/test_number"
+            android:textColor="@color/colorFat"
+            android:textSize="@dimen/register_text_size" />
+
+        <TextView
+            android:id="@+id/adapter_ingredient_protein"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/adapter_ingredient_margin_element"
+            android:layout_marginRight="@dimen/adapter_ingredient_margin_element"
+            android:text="@string/test_number"
+            android:textColor="@color/colorProtein"
+            android:textSize="@dimen/register_text_size" />
+
+    </LinearLayout>
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/adapter_ingredient_divider_height"
+        android:background="?android:attr/listDivider" />
+
+
+</LinearLayout>

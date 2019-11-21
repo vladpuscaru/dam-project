@@ -3,26 +3,58 @@ package com.example.damproject.util;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class User implements Parcelable {
-    private String name;
-    private String password;
+import com.example.damproject.MainActivity;
 
-    public User(String name, String password) {
-        this.name = name;
-        this.password = password;
+import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
+public class User implements Parcelable, Serializable {
+    private String username;
+    private String password;
+    private Date birthday;
+    private int weight;
+    private int height;
+
+    public User() {
+    }
+
+    public int getAge() {
+        return 22;
     }
 
     @Override
     public String toString() {
         return "User{" +
-                "name='" + name + '\'' +
+                "username='" + username + '\'' +
                 ", password='" + password + '\'' +
+                ", birthday=" + birthday +
+                ", weight=" + weight +
+                ", height=" + height +
                 '}';
     }
 
+    public User(String username, String password, Date birthday, int weight, int height) {
+        this.username = username;
+        this.password = password;
+        this.birthday = birthday;
+        this.weight = weight;
+        this.height = height;
+    }
+
     protected User(Parcel in) {
-        name = in.readString();
+        username = in.readString();
         password = in.readString();
+        try {
+            this.birthday = new SimpleDateFormat(MainActivity.DATE_FORMAT,
+                    Locale.US).parse(in.readString());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        weight = in.readInt();
+        height = in.readInt();
     }
 
     public static final Creator<User> CREATOR = new Creator<User>() {
@@ -37,12 +69,12 @@ public class User implements Parcelable {
         }
     };
 
-    public String getName() {
-        return name;
+    public String getUsername() {
+        return username;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {
@@ -53,6 +85,30 @@ public class User implements Parcelable {
         this.password = password;
     }
 
+    public Date getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(Date birthday) {
+        this.birthday = birthday;
+    }
+
+    public int getWeight() {
+        return weight;
+    }
+
+    public void setWeight(int weight) {
+        this.weight = weight;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -60,7 +116,14 @@ public class User implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(name);
+        dest.writeString(username);
         dest.writeString(password);
+        String strBirthday = this.birthday != null ?
+                new SimpleDateFormat(MainActivity.DATE_FORMAT,
+                        Locale.US).format(this.birthday)
+                : null;
+        dest.writeString(strBirthday);
+        dest.writeInt(weight);
+        dest.writeInt(height);
     }
 }

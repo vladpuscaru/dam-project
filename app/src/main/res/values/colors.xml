@@ -4,4 +4,8 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
     <color name="colorButton">#3A7CA5</color>
+    <color name="colorCalories">#FBB13C</color>
+    <color name="colorCarbohydrates">#218380</color>
+    <color name="colorFat">#E53D00</color>
+    <color name="colorProtein">#FFE900</color>
 </resources>

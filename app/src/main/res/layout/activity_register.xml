@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/home_section_padding"
+    tools:context=".RegisterActivity">
+
+    <!--  Account Info -->
+    <LinearLayout
+        android:id="@+id/register_section_account_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorButton"
+            android:padding="@dimen/register_section_title_padding"
+            android:text="@string/register_section_account_info_title"
+            android:textAlignment="center"
+            android:textSize="@dimen/register_section_title_text_size" />
+
+
+        <LinearLayout
+            android:id="@+id/register_input_username"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/register_input_username_label"
+                android:textSize="@dimen/register_text_size" />
+
+            <EditText
+                android:id="@+id/register_et_username"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/register_input_margin_left"
+                android:layout_marginLeft="@dimen/register_input_margin_left"
+                android:layout_weight="1"
+                android:inputType="text"
+                android:textSize="@dimen/register_text_size" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/register_input_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/register_input_password_label"
+                android:textSize="@dimen/register_text_size" />
+
+            <EditText
+                android:id="@+id/register_et_password"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/register_input_margin_left"
+                android:layout_marginLeft="@dimen/register_input_margin_left"
+                android:layout_weight="1"
+                android:inputType="textPassword"
+                android:textSize="@dimen/register_text_size" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/register_input_confirm_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/register_input_confirm_password_label"
+                android:textSize="@dimen/register_text_size" />
+
+            <EditText
+                android:id="@+id/register_et_confirm_password"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/register_input_margin_left"
+                android:layout_marginLeft="@dimen/register_input_margin_left"
+                android:layout_weight="1"
+                android:inputType="textPassword"
+                android:textSize="@dimen/register_text_size" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+    <!--  Person Info-->
+    <LinearLayout
+        android:id="@+id/register_section_personal_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/register_section_account_info"
+        android:orientation="vertical"
+        android:paddingTop="@dimen/home_section_padding">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorButton"
+            android:padding="@dimen/register_section_title_padding"
+            android:text="@string/register_section_personal_info_title"
+            android:textAlignment="center"
+            android:textSize="@dimen/register_section_title_text_size" />
+
+
+        <LinearLayout
+            android:id="@+id/register_input_birthday"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="@string/register_input_birthday_label"
+                android:textSize="@dimen/register_text_size" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/register_et_birthday"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/register_input_margin_left"
+                    android:layout_marginLeft="@dimen/register_input_margin_left"
+                    android:layout_weight="1"
+                    android:inputType="date"
+                    android:textSize="@dimen/register_text_size" />
+
+                <Button
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.2"
+                    android:background="@drawable/ic_home_black_24dp" />
+
+            </LinearLayout>
+
+
+            <DatePicker
+                android:id="@+id/register_dp_birthday"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:visibility="gone" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/register_input_weight"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="@string/register_input_weight_label"
+                android:textSize="@dimen/register_text_size" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/register_et_weight"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/register_input_margin_left"
+                    android:layout_marginLeft="@dimen/register_input_margin_left"
+                    android:layout_weight="1"
+                    android:inputType="number"
+                    android:textSize="@dimen/register_text_size" />
+
+                <Spinner
+                    android:id="@+id/register_spn_weight"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent" />
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/register_input_height"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="@string/register_input_height_label"
+                android:textSize="@dimen/register_text_size" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/register_et_height"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/register_input_margin_left"
+                    android:layout_marginLeft="@dimen/register_input_margin_left"
+                    android:layout_weight="1"
+                    android:inputType="number"
+                    android:textSize="@dimen/register_text_size" />
+
+                <Spinner
+                    android:id="@+id/register_spn_height"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent" />
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/register_input_image"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="@string/register_input_image"
+                android:textSize="@dimen/register_text_size" />
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/register_tv_error_report"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/register_section_personal_info"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:textAlignment="center"
+        android:textSize="@dimen/register_error_text_size"
+        android:textColor="@android:color/holo_red_dark" />
+
+    <Button
+        android:id="@+id/register_btn_register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:background="@color/colorButton"
+        android:padding="@dimen/register_button_padding"
+        android:text="@string/register_btn_register"
+        android:textColor="@android:color/white" />
+
+</RelativeLayout>

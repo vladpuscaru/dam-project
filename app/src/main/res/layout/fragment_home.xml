@@ -47,7 +47,7 @@
                 android:text="@string/test_text" />
 
             <TextView
-                android:id="@+id/home_tv_user_kg"
+                android:id="@+id/home_tv_user_weight"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/home_tv_user_name"
@@ -56,12 +56,24 @@
                 android:layout_toEndOf="@+id/home_tv_user_age"
                 android:layout_toRightOf="@+id/home_tv_user_age"
                 android:text="@string/test_text" />
+
+
+            <TextView
+                android:id="@+id/home_tv_user_height"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/home_tv_user_name"
+                android:layout_marginStart="@dimen/home_user_info_tv_margin"
+                android:layout_marginLeft="@dimen/home_user_info_tv_margin"
+                android:layout_toEndOf="@+id/home_tv_user_weight"
+                android:layout_toRightOf="@+id/home_tv_user_weight"
+                android:text="@string/test_text" />
         </RelativeLayout>
 
         <View
             android:id="@+id/home_divider_1"
             android:layout_width="match_parent"
-            android:layout_height="5dp"
+            android:layout_height="1dp"
             android:background="?android:attr/listDivider"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/home_section_user_info" />
@@ -108,10 +120,9 @@
 
                     <Button
                         android:id="@+id/home_btn_subsection_food_add_button"
-                        style="?android:attr/borderlessButtonStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@color/colorButton"
+                        android:background="@drawable/add_button_border"
                         android:text="@string/home_subsection_food_button" />
                 </LinearLayout>
 
@@ -123,6 +134,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/home_subsection_food_section_title">
 
                     <HorizontalScrollView
+                        android:id="@+id/home_subsection_food_section_buttons"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:layout_constraintLeft_toLeftOf="parent"
@@ -137,8 +149,6 @@
                                 android:id="@+id/home_btn_subsection_food_breakfast"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/home_user_info_tv_margin"
-                                android:layout_marginLeft="@dimen/home_user_info_tv_margin"
                                 android:text="@string/home_btn_subsection_food_breakfast"
                                 app:layout_constraintLeft_toLeftOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -147,8 +157,6 @@
                                 android:id="@+id/home_btn_subsection_food_lunch"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/home_user_info_tv_margin"
-                                android:layout_marginLeft="@dimen/home_user_info_tv_margin"
                                 android:text="@string/home_btn_subsection_food_lunch"
                                 app:layout_constraintLeft_toRightOf="@id/home_btn_subsection_food_breakfast"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -157,9 +165,7 @@
                                 android:id="@+id/home_btn_subsection_food_dinner"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/home_user_info_tv_margin"
-                                android:layout_marginLeft="@dimen/home_user_info_tv_margin"
-                                android:text="@string/home_btn_subsection_food_breakfast"
+                                android:text="@string/home_btn_subsection_food_dinner"
                                 app:layout_constraintLeft_toRightOf="@+id/home_btn_subsection_food_lunch"
                                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -167,9 +173,7 @@
                                 android:id="@+id/home_btn_subsection_food_snacks"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/home_user_info_tv_margin"
-                                android:layout_marginLeft="@dimen/home_user_info_tv_margin"
-                                android:text="@string/home_btn_subsection_food_breakfast"
+                                android:text="@string/home_btn_subsection_food_snacks"
                                 app:layout_constraintLeft_toRightOf="@+id/home_btn_subsection_food_dinner"
                                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -181,8 +185,9 @@
                         android:id="@+id/home_lv_subsection_food"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:paddingTop="@dimen/home_section_padding"
                         app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
+                        app:layout_constraintTop_toBottomOf="@+id/home_subsection_food_section_buttons">
 
                     </ListView>
 
@@ -195,7 +200,7 @@
         <View
             android:id="@+id/home_divider_2"
             android:layout_width="match_parent"
-            android:layout_height="5dp"
+            android:layout_height="1dp"
             android:background="?android:attr/listDivider"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/home_section_today_track" />
