@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/home_section_padding"
+    tools:context=".fragments.AboutFragment">
+
+    <LinearLayout
+        android:id="@+id/about_first_section"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal"
+            android:text="@string/about_title" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:gravity="center_horizontal"
+            android:text="@string/about_description" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:gravity="center_horizontal"
+            android:text="@string/about_project_description" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/about_second_section"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/about_first_section"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/about_features_label" />
+
+        <ListView
+            android:id="@+id/about_lv_features"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/about_list_max_height" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/about_third_section"
+        android:layout_below="@+id/about_second_section"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/about_student_name" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/about_teachers_names" />
+
+    </LinearLayout>
+
+    <RatingBar
+        android:id="@+id/about_rb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:numStars="5"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
+
+</RelativeLayout>

@@ -267,18 +267,40 @@
         android:layout_below="@+id/register_section_personal_info"
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:textAlignment="center"
-        android:textSize="@dimen/register_error_text_size"
-        android:textColor="@android:color/holo_red_dark" />
+        android:textColor="@android:color/holo_red_dark"
+        android:textSize="@dimen/register_error_text_size" />
 
-    <Button
-        android:id="@+id/register_btn_register"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:background="@color/colorButton"
-        android:padding="@dimen/register_button_padding"
-        android:text="@string/register_btn_register"
-        android:textColor="@android:color/white" />
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/register_btn_cancel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:background="@color/colorFat"
+            android:textColor="@android:color/white"
+            android:layout_weight="1"
+            android:padding="@dimen/register_button_padding"
+            android:text="@string/register_btn_cancel" />
+
+        <Button
+            android:id="@+id/register_btn_register"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:background="@color/colorButton"
+            android:padding="@dimen/register_button_padding"
+            android:text="@string/register_btn_register"
+            android:textColor="@android:color/white" />
+
+    </LinearLayout>
+
 
 </RelativeLayout>

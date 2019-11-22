@@ -9,6 +9,7 @@
     android:paddingRight="@dimen/login_horizontal_padding"
     android:paddingBottom="@dimen/login_vertical_padding"
     tools:context=".LoginActivity"
+    android:background="@drawable/faap_login_background"
     tools:ignore="Autofill">
 
 
@@ -19,7 +20,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:contentDescription="@string/app_name"
-        app:srcCompat="@drawable/app_logo" />
+        app:srcCompat="@drawable/faap_logo" />
 
 
     <EditText

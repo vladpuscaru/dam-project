@@ -34,6 +34,7 @@ public class AddFoodActivity extends AppCompatActivity {
     private Button btnChooseIngredient;
     private Button btnAddIngredient;
     private Button btnSubmit;
+    private Button btnCancel;
     private EditText etIngredientName;
     private EditText etIngredientCalories;
     private EditText etIngredientCarbohydrates;
@@ -63,6 +64,7 @@ public class AddFoodActivity extends AppCompatActivity {
         btnChooseIngredient = findViewById(R.id.add_food_btn_choose_ingredient);
         btnAddIngredient = findViewById(R.id.add_food_btn_add_ingredient);
         btnSubmit = findViewById(R.id.add_food_btn_submit);
+        btnCancel = findViewById(R.id.add_food_btn_cancel);
         etIngredientName = findViewById(R.id.add_food_ingredient_et_name);
         etIngredientCalories = findViewById(R.id.add_food_ingredient_et_calories);
         etIngredientCarbohydrates = findViewById(R.id.add_food_ingredient_et_carbohydrates);
@@ -160,6 +162,15 @@ public class AddFoodActivity extends AppCompatActivity {
                 } else {
                     showFoodErrors();
                 }
+            }
+        });
+
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), HomeFragment.class);
+                setResult(RESULT_CANCELED, intent);
+                finish();
             }
         });
     }

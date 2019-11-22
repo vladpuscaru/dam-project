@@ -255,13 +255,31 @@
             android:textColor="@android:color/holo_red_dark"
             android:textSize="@dimen/register_error_text_size" />
 
-        <!-- Submit Button -->
-        <Button
-            android:id="@+id/add_food_btn_submit"
+
+        <!-- Cancel/Submit Buttons -->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/add_food_input_error"
-            android:text="@string/add_food_btn_label" />
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/add_food_btn_cancel"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="@string/add_food_btn_cancel_label"/>
+
+            <Button
+                android:id="@+id/add_food_btn_submit"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="@string/add_food_btn_label" />
+
+        </LinearLayout>
+
+
 
     </RelativeLayout>
 

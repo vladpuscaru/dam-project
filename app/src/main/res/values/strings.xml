@@ -1,9 +1,9 @@
 <resources>
-    <string name="app_name">FAPA - Fit As A Plant</string>
-    <string name="menu_item_home">Acasa</string>
-    <string name="menu_item_journal">Jurnal</string>
-    <string name="menu_item_history">Istorie</string>
-    <string name="menu_item_settings">Setari</string>
+    <string name="app_name">FAAP - Fit As A Plant</string>
+    <string name="menu_item_home">Home</string>
+    <string name="menu_item_journal">Journal</string>
+    <string name="menu_item_history">History</string>
+    <string name="menu_item_settings">About</string>
     <string name="login_et_name">username</string>
     <string name="login_et_password">password</string>
     <string name="login_btn_submit">Submit</string>
@@ -50,6 +50,15 @@
     <string name="add_food_ingredients_btn_label">ADD INGREDIENT</string>
     <string name="add_food_btn_label">SUBMIT</string>
     <string name="test_number">28</string>
+    <string name="about_title">FAAP - Fit As A Plant</string>
+    <string name="about_description">FAAP is an app which acts as a \"personal accountant\" when it comes to your health.</string>
+    <string name="about_project_description">This app is made as a final project for the Android Development Class at the Faculty of Cybernetics, Statistics and Informatic Economics, Bucharest.</string>
+    <string name="about_features_label">Features:</string>
+    <string name="about_student_name">Student: Puscaru Vlad-Cristian</string>
+    <string name="about_teachers_names">Teachers: Pocatiliu Paul, Dita Alexandru</string>
+    <string name="home_btn_edit_user">Edit</string>
+    <string name="register_btn_cancel">Cancel</string>
+    <string name="add_food_btn_cancel_label">CANCEL</string>
 
     <string-array name="weights_array">
         <item>kg</item>
@@ -60,5 +69,10 @@
         <item>cm</item>
         <item>inches</item>
         <item>feet</item>
+    </string-array>
+
+    <string-array name="features_array">
+        <item>Track daily food consumption</item>
+        <item>Create new recipes</item>
     </string-array>
 </resources>

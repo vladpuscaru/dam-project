@@ -10,6 +10,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.damproject.fragments.HomeFragment;
 import com.example.damproject.util.FileUpdater;
 import com.example.damproject.util.InputError;
 import com.example.damproject.util.User;
@@ -24,8 +25,12 @@ import java.util.List;
 import java.util.Locale;
 
 public class RegisterActivity extends AppCompatActivity {
+    public final static String EDITED_USER_KEY = "new.user.key";
     public final static String USERNAME_KEY = "username.key";
     public final static String PASSOWRD_KEY = "password.key";
+
+    private User loggedUser;
+    private String oldUsername;
 
     private InputError inputError;
 
@@ -38,6 +43,7 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText etWeight;
     private EditText etHeight;
     private Button btnRegister;
+    private Button btnCancel;
     private TextView tvErrorReport;
 
     private List<EditText> etInvalid = new ArrayList<>();
@@ -48,6 +54,14 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register);
 
         initComponents();
+
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            loggedUser = (User) bundle.getParcelable(HomeFragment.EDIT_USER_KEY);
+            oldUsername = loggedUser.getUsername();
+        } else {
+            loggedUser = null;
+        }
     }
 
     private void initComponents() {
@@ -60,16 +74,33 @@ public class RegisterActivity extends AppCompatActivity {
         etHeight = findViewById(R.id.register_et_height);
         tvErrorReport = findViewById(R.id.register_tv_error_report);
         btnRegister = findViewById(R.id.register_btn_register);
+        btnCancel = findViewById(R.id.register_btn_cancel);
 
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (validate()) {
-                    Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                    intent.putExtra(USERNAME_KEY, etUsername.getText().toString());
-                    intent.putExtra(PASSOWRD_KEY, etPassword.getText().toString());
-                    // TODO: add new user to db
-                    new FileUpdater(MainActivity.USERS_FILE).execute(createUserFromView());
+                    Intent intent;
+                    // creating a new user
+                    if (loggedUser == null) {
+                        intent = new Intent(getApplicationContext(), LoginActivity.class);
+                        intent.putExtra(USERNAME_KEY, etUsername.getText().toString());
+                        intent.putExtra(PASSOWRD_KEY, etPassword.getText().toString());
+                        // TODO: add new user to db
+                        new FileUpdater(getApplicationContext(), MainActivity.USERS_FILE).execute(createUserFromView());
+                    }
+                    // edited a current user
+                    else {
+                        intent = new Intent(getApplicationContext(), HomeFragment.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putParcelable(EDITED_USER_KEY, createUserFromView());
+                        intent.putExtras(bundle);
+                        // TODO: edit the user from db
+                        User[] users = new User[2];
+                        users[0] = createUserFromView();
+                        users[1] = loggedUser;
+                        new FileUpdater(getApplicationContext(), MainActivity.USERS_FILE).execute(users);
+                    }
                     setResult(RESULT_OK, intent);
                     finish();
                 } else {
@@ -78,6 +109,20 @@ public class RegisterActivity extends AppCompatActivity {
                         et.setBackgroundColor(getResources().getColor(android.R.color.holo_red_light));
                     }
                 }
+            }
+        });
+
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent;
+                if (loggedUser == null) {
+                    intent = new Intent(getApplicationContext(), LoginActivity.class);
+                } else {
+                    intent = new Intent(getApplicationContext(), HomeFragment.class);
+                }
+                setResult(RESULT_CANCELED, intent);
+                finish();
             }
         });
     }

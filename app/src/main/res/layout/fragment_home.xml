@@ -35,6 +35,14 @@
                 android:layout_toRightOf="@+id/home_img_user"
                 android:text="@string/test_text" />
 
+            <Button
+                android:id="@+id/home_btn_user_edit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/home_img_user"
+                style="?android:attr/borderlessButtonStyle"
+                android:text="@string/home_btn_edit_user" />
+
             <TextView
                 android:id="@+id/home_tv_user_age"
                 android:layout_width="wrap_content"
@@ -68,6 +76,7 @@
                 android:layout_toEndOf="@+id/home_tv_user_weight"
                 android:layout_toRightOf="@+id/home_tv_user_weight"
                 android:text="@string/test_text" />
+
         </RelativeLayout>
 
         <View

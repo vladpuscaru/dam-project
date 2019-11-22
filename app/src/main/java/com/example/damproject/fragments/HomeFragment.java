@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.example.damproject.AddFoodActivity;
 import com.example.damproject.LoginActivity;
 import com.example.damproject.R;
+import com.example.damproject.RegisterActivity;
 import com.example.damproject.adapters.FoodListAdapter;
 import com.example.damproject.util.FoodItem;
 import com.example.damproject.util.Ingredient;
@@ -34,6 +35,8 @@ import java.util.Locale;
 import static android.app.Activity.RESULT_OK;
 
 public class HomeFragment extends Fragment {
+    public final static String EDIT_USER_KEY = "edit.user.key";
+    public final static int EDIT_USER_REQUEST = 90;
     public final static int ADD_FOOD_REQUEST = 80;
 
     private User loggedUser;
@@ -48,6 +51,7 @@ public class HomeFragment extends Fragment {
     private TextView tvUserAge;
     private TextView tvUserWeight;
     private TextView tvUserHeight;
+    private Button btnUserEdit;
 
     private Button btnAddFood;
     private Button btnListBreakfast;
@@ -90,6 +94,7 @@ public class HomeFragment extends Fragment {
         tvUserAge = view.findViewById(R.id.home_tv_user_age);
         tvUserWeight = view.findViewById(R.id.home_tv_user_weight);
         tvUserHeight = view.findViewById(R.id.home_tv_user_height);
+        btnUserEdit = view.findViewById(R.id.home_btn_user_edit);
         lvFood = view.findViewById(R.id.home_lv_subsection_food);
         btnAddFood = view.findViewById(R.id.home_btn_subsection_food_add_button);
         btnListBreakfast = view.findViewById(R.id.home_btn_subsection_food_breakfast);
@@ -144,22 +149,40 @@ public class HomeFragment extends Fragment {
                 startActivityForResult(intent, ADD_FOOD_REQUEST);
             }
         });
+
+        btnUserEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getView().getContext(), RegisterActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putParcelable(EDIT_USER_KEY, loggedUser);
+                intent.putExtras(bundle);
+                startActivityForResult(intent, EDIT_USER_REQUEST);
+            }
+        });
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode == RESULT_OK && requestCode == ADD_FOOD_REQUEST) {
-            Bundle bundle = data.getExtras();
-            FoodItem foodItem = bundle.getParcelable(AddFoodActivity.NEW_FOOD_KEY);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == ADD_FOOD_REQUEST) {
+                Bundle bundle = data.getExtras();
+                FoodItem foodItem = bundle.getParcelable(AddFoodActivity.NEW_FOOD_KEY);
 
-            addFoodOnActiveList(foodItem);
+                addFoodOnActiveList(foodItem);
 
-            FoodListAdapter adapter = (FoodListAdapter) lvFood.getAdapter();
-            adapter.notifyDataSetChanged();
+                FoodListAdapter adapter = (FoodListAdapter) lvFood.getAdapter();
+                adapter.notifyDataSetChanged();
 
-            Log.d("HOME", String.valueOf(foodBreakfast.size()));
+//                Log.d("HOME", String.valueOf(foodBreakfast.size()));
+            }
+
+            if (requestCode == EDIT_USER_REQUEST) {
+                Bundle bundle = data.getExtras();
+                loggedUser = bundle.getParcelable(RegisterActivity.EDITED_USER_KEY);
+            }
         }
     }
 

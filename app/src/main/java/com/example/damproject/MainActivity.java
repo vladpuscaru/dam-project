@@ -1,16 +1,12 @@
 package com.example.damproject;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
-import android.util.Log;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.example.damproject.fragments.HistoryFragment;
 import com.example.damproject.fragments.HomeFragment;
 import com.example.damproject.fragments.JournalFragment;
-import com.example.damproject.fragments.SettingsFragment;
+import com.example.damproject.fragments.AboutFragment;
 import com.example.damproject.util.User;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -18,9 +14,6 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import androidx.appcompat.app.AppCompatActivity;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -68,8 +61,8 @@ public class MainActivity extends AppCompatActivity {
                         case R.id.nav_history:
                             currentFragment = createHistoryFragment();
                             break;
-                        case R.id.nav_settings:
-                            currentFragment = createSettingsFragment();
+                        case R.id.nav_about:
+                            currentFragment = createAboutFragment();
                             break;
                     }
 
@@ -101,8 +94,11 @@ public class MainActivity extends AppCompatActivity {
         return fragment;
     }
 
-    private Fragment createSettingsFragment() {
-        Fragment fragment = new SettingsFragment();
+    private Fragment createAboutFragment() {
+        Fragment fragment = new AboutFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString(LoginActivity.USER_KEY, loggedUser.getUsername());
+        fragment.setArguments(bundle);
         return fragment;
     }
 

@@ -19,4 +19,5 @@
     <dimen name="adapter_ingredient_margin_title">8dp</dimen>
     <dimen name="adapter_ingredient_margin_element">4dp</dimen>
     <dimen name="adapter_ingredient_divider_height">1dp</dimen>
+    <dimen name="about_list_max_height">200dp</dimen>
 </resources>
