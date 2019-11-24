@@ -7,7 +7,7 @@
     <string name="login_et_name">username</string>
     <string name="login_et_password">password</string>
     <string name="login_btn_submit">Submit</string>
-    <string name="copy">© 2019 Vlad Puscaru. FAPA - Fit As A Plant. All rights reserverd</string>
+    <string name="copy">© Vlad Puscaru 2019. FAPA - Fit As A Plant. All rights reserverd</string>
     <string name="login_et_username_hint">Username</string>
     <string name="login_et_password_hint">Password</string>
     <string name="login_btn_login">Log in</string>
@@ -37,6 +37,7 @@
     <string name="register_input_height_label">Height</string>
     <string name="register_input_image">Avatar</string>
     <string name="register_btn_register">Register</string>
+    <string name="register_btn_save">Save</string>
     <string name="add_food_name_label">Name</string>
     <string name="add_food_ingredients_title">Ingredients</string>
     <string name="add_food_ingredients_choose_label">Choose</string>
@@ -59,6 +60,9 @@
     <string name="home_btn_edit_user">Edit</string>
     <string name="register_btn_cancel">Cancel</string>
     <string name="add_food_btn_cancel_label">CANCEL</string>
+    <string name="food_list_title">Elevated recipes</string>
+    <string name="add_food_input_picture_label">Picture</string>
+    <string name="add_food_input_picture_btn_label">+</string>
 
     <string-array name="weights_array">
         <item>kg</item>

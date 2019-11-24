@@ -23,6 +23,7 @@ import com.example.damproject.RegisterActivity;
 import com.example.damproject.adapters.FoodListAdapter;
 import com.example.damproject.util.FoodItem;
 import com.example.damproject.util.Ingredient;
+import com.example.damproject.util.UTIL;
 import com.example.damproject.util.User;
 
 import org.jetbrains.annotations.NotNull;
@@ -72,10 +73,16 @@ public class HomeFragment extends Fragment {
         final View view = inflater.inflate(R.layout.fragment_home, container, false);
 
         // TODO: remove this test list init
+        List<Ingredient> testIngredients1 = new ArrayList<>();
+        testIngredients1.add(new Ingredient("Cheese", 200, 10, 50, 140));
+        testIngredients1.add(new Ingredient("Bread", 20, 10, 5, 5));
         List<Ingredient> testIngredients = new ArrayList<>();
         testIngredients.add(new Ingredient("Bacon", 190, 70, 80, 40));
         testIngredients.add(new Ingredient("Bread", 60, 30, 10, 20));
         foodBreakfast.add(new FoodItem("Sandwich BLT", testIngredients));
+        foodBreakfast.add(new FoodItem("Cheesewich", testIngredients1));
+
+
         // TODO: remove this test list init
 
         initComponents(view);
@@ -116,6 +123,7 @@ public class HomeFragment extends Fragment {
 
         FoodListAdapter adapter = getActiveList();
         lvFood.setAdapter(adapter);
+        UTIL.setListViewHeightBasedOnChildren(lvFood);
 
         btnListBreakfast.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -175,6 +183,7 @@ public class HomeFragment extends Fragment {
 
                 FoodListAdapter adapter = (FoodListAdapter) lvFood.getAdapter();
                 adapter.notifyDataSetChanged();
+                UTIL.setListViewHeightBasedOnChildren(lvFood);
 
 //                Log.d("HOME", String.valueOf(foodBreakfast.size()));
             }
@@ -229,18 +238,19 @@ public class HomeFragment extends Fragment {
         setActiveButton(v, v.getId());
 
         lvFood.setAdapter(getActiveList());
+        UTIL.setListViewHeightBasedOnChildren(lvFood);
     }
 
     private int getActiveButton() {
         int n = -1;
 
-        if (!btnListBreakfast.isClickable())
+        if (!btnListBreakfast.isEnabled())
             n = 1;
-        if (!btnListLunch.isClickable())
+        else if (!btnListLunch.isEnabled())
             n = 2;
-        if (!btnListDinner.isClickable())
+        else if (!btnListDinner.isEnabled())
             n = 3;
-        if (!btnListSnacks.isClickable())
+        else if (!btnListSnacks.isEnabled())
             n = 4;
 
         return n;
@@ -248,18 +258,18 @@ public class HomeFragment extends Fragment {
 
     private void setActiveButton(@NotNull View view, int id) {
         Button active = view.findViewById(id);
-        active.setClickable(false);
+        active.setEnabled(false);
         active.setBackgroundColor(getResources().getColor(android.R.color.holo_orange_light));
     }
 
     private void deActivateButtons() {
-        btnListBreakfast.setClickable(true);
+        btnListBreakfast.setEnabled(true);
         btnListBreakfast.setBackgroundColor(getResources().getColor(R.color.colorButton));
-        btnListLunch.setClickable(true);
+        btnListLunch.setEnabled(true);
         btnListLunch.setBackgroundColor(getResources().getColor(R.color.colorButton));
-        btnListDinner.setClickable(true);
+        btnListDinner.setEnabled(true);
         btnListDinner.setBackgroundColor(getResources().getColor(R.color.colorButton));
-        btnListSnacks.setClickable(true);
+        btnListSnacks.setEnabled(true);
         btnListSnacks.setBackgroundColor(getResources().getColor(R.color.colorButton));
     }
 

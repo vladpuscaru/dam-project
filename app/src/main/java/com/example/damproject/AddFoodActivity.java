@@ -1,14 +1,23 @@
 package com.example.damproject;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -17,6 +26,7 @@ import com.example.damproject.adapters.IngredientListAdapter;
 import com.example.damproject.fragments.HomeFragment;
 import com.example.damproject.util.FoodItem;
 import com.example.damproject.util.Ingredient;
+import com.example.damproject.util.UTIL;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -24,6 +34,9 @@ import java.util.List;
 
 public class AddFoodActivity extends AppCompatActivity {
     public final static String NEW_FOOD_KEY = "new.food.key";
+
+    public final static int REQUEST_PICTURE_CAPTURE = 0;
+    public final static int REQUEST_PICTURE_CHOOSE = 1;
 
     private ArrayList<Ingredient> ingredients = new ArrayList<>();
     private String errorMessage;
@@ -35,6 +48,8 @@ public class AddFoodActivity extends AppCompatActivity {
     private Button btnAddIngredient;
     private Button btnSubmit;
     private Button btnCancel;
+    private Button btnPicture;
+    private ImageView imgFood;
     private EditText etIngredientName;
     private EditText etIngredientCalories;
     private EditText etIngredientCarbohydrates;
@@ -65,6 +80,8 @@ public class AddFoodActivity extends AppCompatActivity {
         btnAddIngredient = findViewById(R.id.add_food_btn_add_ingredient);
         btnSubmit = findViewById(R.id.add_food_btn_submit);
         btnCancel = findViewById(R.id.add_food_btn_cancel);
+        btnPicture = findViewById(R.id.add_food_input_picture_btn);
+        imgFood = findViewById(R.id.add_food_input_picture_img);
         etIngredientName = findViewById(R.id.add_food_ingredient_et_name);
         etIngredientCalories = findViewById(R.id.add_food_ingredient_et_calories);
         etIngredientCarbohydrates = findViewById(R.id.add_food_ingredient_et_carbohydrates);
@@ -99,6 +116,7 @@ public class AddFoodActivity extends AppCompatActivity {
 
         IngredientListAdapter listAdapter = new IngredientListAdapter(getApplicationContext(), ingredients);
         lvIngredients.setAdapter(listAdapter);
+        UTIL.setListViewHeightBasedOnChildren(lvIngredients);
 
         deActivateButtons();
         setButtonActive(btnCreateIngredient.getId());
@@ -139,6 +157,7 @@ public class AddFoodActivity extends AppCompatActivity {
                             Log.d("ADDINGREDIENT", "I am here!");
                             IngredientListAdapter adapter = (IngredientListAdapter) lvIngredients.getAdapter();
                             adapter.notifyDataSetChanged();
+                            UTIL.setListViewHeightBasedOnChildren(lvIngredients);
                         } else {
                             showIngredientErrors();
                         }
@@ -173,6 +192,63 @@ public class AddFoodActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        btnPicture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final CharSequence[] options = { "Take Photo", "Choose from Gallery", "Cancel" };
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(AddFoodActivity.this);
+                builder.setTitle("Choose a picture for your food");
+
+                builder.setItems(options, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        if (options[which].equals("Take Photo")) {
+                            Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                            startActivityForResult(intent, REQUEST_PICTURE_CAPTURE);
+                        } else if (options[which].equals("Choose from Gallery")) {
+                            Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                            startActivityForResult(intent, REQUEST_PICTURE_CHOOSE);
+                        } else if (options[which].equals("Cancel")) {
+                            dialog.dismiss();
+                        }
+
+                    }
+                });
+
+                builder.show();
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (resultCode == RESULT_OK && data != null) {
+            switch (requestCode) {
+                case REQUEST_PICTURE_CAPTURE:
+                    Bitmap selectedImage = (Bitmap) data.getExtras().get("data");
+                    imgFood.setImageBitmap(selectedImage);
+                    break;
+                case REQUEST_PICTURE_CHOOSE:
+                    Uri uriSelectedImage = data.getData();
+                    String[] filePathColumn = { MediaStore.Images.Media.DATA };
+                    if (uriSelectedImage != null) {
+                        Cursor cursor = getContentResolver().query(uriSelectedImage, filePathColumn, null, null, null);
+                        if (cursor != null) {
+                            cursor.moveToFirst();
+
+                            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                            String picturePath = cursor.getString(columnIndex);
+
+                            imgFood.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+                            cursor.close();
+                        }
+                    }
+                    break;
+            }
+        }
     }
 
     private void hideErrors() {
@@ -410,9 +486,9 @@ public class AddFoodActivity extends AppCompatActivity {
 
     private int getActiveButton() {
         int n = -1;
-        if (!btnCreateIngredient.isClickable())
+        if (!btnCreateIngredient.isEnabled())
             n = 1;
-        else if (!btnChooseIngredient.isClickable())
+        else if (!btnChooseIngredient.isEnabled())
             n = 2;
         return n;
     }
@@ -423,22 +499,22 @@ public class AddFoodActivity extends AppCompatActivity {
     }
 
     private void setActiveMode() {
-        if (!btnCreateIngredient.isClickable())
+        if (!btnCreateIngredient.isEnabled())
             ingredientsCreate.setVisibility(View.VISIBLE);
-        else if (!btnChooseIngredient.isClickable())
+        else if (!btnChooseIngredient.isEnabled())
             ingredientsChoose.setVisibility(View.VISIBLE);
     }
 
     private void setButtonActive(int id) {
         Button button = findViewById(id);
         button.setTextColor(getResources().getColor(R.color.colorButton));
-        button.setClickable(false);
+        button.setEnabled(false);
     }
 
     private void deActivateButtons() {
-        btnChooseIngredient.setClickable(true);
+        btnChooseIngredient.setEnabled(true);
         btnChooseIngredient.setTextColor(getResources().getColor(R.color.colorAccent));
-        btnCreateIngredient.setClickable(true);
+        btnCreateIngredient.setEnabled(true);
         btnCreateIngredient.setTextColor(getResources().getColor(R.color.colorAccent));
     }
 

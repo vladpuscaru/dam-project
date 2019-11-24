@@ -55,7 +55,7 @@ public class AboutFragment extends Fragment {
 
         if (getActivity() != null) {
             preferences = getActivity().getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
-            float v = preferences.getFloat(RATING_BAR_SHARED_PREFERENCES, -1);
+            float v = preferences.getFloat(RATING_BAR_SHARED_PREFERENCES + "." + username, -1);
             if (v != -1) {
                 ratingBar.setRating(v);
             }

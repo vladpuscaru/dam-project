@@ -2,6 +2,7 @@ package com.example.damproject;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.Room;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +14,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.amitshekhar.DebugDB;
+import com.example.damproject.db.AppDatabase;
 import com.example.damproject.util.User;
 
 import java.io.File;
@@ -27,6 +30,9 @@ public class LoginActivity extends AppCompatActivity {
     public static final String USER_KEY = "login.user.key";
     public static final int CREATE_USER_REQUEST = 1;
 
+    public static AppDatabase DATABASE;
+
+
     private EditText etUsername;
     private EditText etPassword;
     private Button btnLogIn;
@@ -39,11 +45,19 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
         initComponents();
     }
 
 
     private void initComponents() {
+        DATABASE = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "FAAP-DATABASE").allowMainThreadQueries().build();
+
+        List<User> users = DATABASE.userDao().getAllUsers();
+        for (User user : users) {
+            Log.d("AllUsers", user.toString());
+        }
+
         etUsername = findViewById(R.id.login_et_username);
         etPassword = findViewById(R.id.login_et_password);
         btnLogIn = findViewById(R.id.login_btn_login);
@@ -54,42 +68,19 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 User user = validateUser();
 
-                if (etUsername.getText().toString().equals("admin") &&
-                    etPassword.getText().toString().equals("admin")) {
-
-                    User x = null;
-                    try {
-                        x = new User(etUsername.getText().toString(),
-                                etPassword.getText().toString(),
-                                new SimpleDateFormat(MainActivity.DATE_FORMAT, Locale.US).parse("20-20-1992"),
-                                100, 100);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
-                    Log.d("LOGIN", x.toString());
-
+                if (user != null) {
                     Bundle bundle = new Bundle();
-                    bundle.putParcelable(USER_KEY, x);
+                    bundle.putParcelable(USER_KEY, user);
 
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     intent.putExtras(bundle);
                     startActivity(intent);
+                } else {
+                    Toast.makeText(getApplicationContext(),
+                            "ERROR: User not found!",
+                            Toast.LENGTH_LONG).show();
                 }
 
-                // TODO: vezi care-i treaba cu fisierele
-//                if (user != null) {
-//                    Bundle bundle = new Bundle();
-//                    bundle.putParcelable(USER_KEY, user);
-//
-//                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-//                    intent.putExtras(bundle);
-//                    startActivity(intent);
-//                } else {
-//                    Toast.makeText(getApplicationContext(),
-//                            "ERROR: User not found!",
-//                            Toast.LENGTH_LONG).show();
-//                }
             }
         });
         btnRegister.setOnClickListener(new View.OnClickListener() {
@@ -108,11 +99,13 @@ public class LoginActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK && requestCode == CREATE_USER_REQUEST) {
             String username = data.getStringExtra(RegisterActivity.USERNAME_KEY);
             String password = data.getStringExtra(RegisterActivity.PASSOWRD_KEY);
+            etUsername.setText(username);
+            etPassword.setText(password);
         }
     }
 
     private User validateUser() {
-        List<User> users = readUsersFromDb(MainActivity.USERS_FILE);
+        List<User> users = DATABASE.userDao().getAllUsers();
         User user = null;
 
         for (User u : users) {

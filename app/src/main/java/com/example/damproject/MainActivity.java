@@ -1,8 +1,10 @@
 package com.example.damproject;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import com.example.damproject.db.AppDatabase;
 import com.example.damproject.fragments.HistoryFragment;
 import com.example.damproject.fragments.HomeFragment;
 import com.example.damproject.fragments.JournalFragment;
@@ -14,12 +16,12 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.Room;
 
 
 public class MainActivity extends AppCompatActivity {
     public static final String DATE_FORMAT = "dd-MM-yyyy";
     public final static String USERS_FILE = "files.user.bin";
-
 
     private User loggedUser;
 

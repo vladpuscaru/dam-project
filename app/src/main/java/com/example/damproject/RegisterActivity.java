@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -11,7 +12,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.damproject.fragments.HomeFragment;
-import com.example.damproject.util.FileUpdater;
 import com.example.damproject.util.InputError;
 import com.example.damproject.util.User;
 
@@ -58,10 +58,20 @@ public class RegisterActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             loggedUser = (User) bundle.getParcelable(HomeFragment.EDIT_USER_KEY);
-            oldUsername = loggedUser.getUsername();
+            setCurrentUserData();
+            btnRegister.setText(getString(R.string.register_btn_save));
         } else {
             loggedUser = null;
         }
+    }
+
+    private void setCurrentUserData() {
+        etUsername.setText(loggedUser.getUsername());
+        etPassword.setText(loggedUser.getPassword());
+        String birthday = new SimpleDateFormat(MainActivity.DATE_FORMAT, Locale.US).format(loggedUser.getBirthday());
+        etBirthday.setText(birthday);
+        etWeight.setText(Integer.toString(loggedUser.getWeight()));
+        etHeight.setText(Integer.toString(loggedUser.getHeight()));
     }
 
     private void initComponents() {
@@ -86,8 +96,8 @@ public class RegisterActivity extends AppCompatActivity {
                         intent = new Intent(getApplicationContext(), LoginActivity.class);
                         intent.putExtra(USERNAME_KEY, etUsername.getText().toString());
                         intent.putExtra(PASSOWRD_KEY, etPassword.getText().toString());
-                        // TODO: add new user to db
-                        new FileUpdater(getApplicationContext(), MainActivity.USERS_FILE).execute(createUserFromView());
+                        // Add user to database
+                        LoginActivity.DATABASE.userDao().insertUser(createUserFromView());
                     }
                     // edited a current user
                     else {
@@ -95,11 +105,8 @@ public class RegisterActivity extends AppCompatActivity {
                         Bundle bundle = new Bundle();
                         bundle.putParcelable(EDITED_USER_KEY, createUserFromView());
                         intent.putExtras(bundle);
-                        // TODO: edit the user from db
-                        User[] users = new User[2];
-                        users[0] = createUserFromView();
-                        users[1] = loggedUser;
-                        new FileUpdater(getApplicationContext(), MainActivity.USERS_FILE).execute(users);
+                        // Edit user in the database
+                        LoginActivity.DATABASE.userDao().updateUser(loggedUser);
                     }
                     setResult(RESULT_OK, intent);
                     finish();

@@ -32,13 +32,48 @@
                 android:textSize="@dimen/register_text_size" />
 
         </LinearLayout>
+        <!-- Food Picture -->
+        <LinearLayout
+            android:id="@+id/add_food_input_picture"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/add_food_input_name"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="@string/add_food_input_picture_label"
+                    android:textSize="@dimen/register_text_size" />
+
+                <Button
+                    android:id="@+id/add_food_input_picture_btn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/add_food_input_picture_btn_label" />
+
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/add_food_input_picture_img"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
 
         <!-- Ingredients -->
         <LinearLayout
             android:id="@+id/add_food_input_ingredients"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/add_food_input_name"
+            android:layout_below="@+id/add_food_input_picture"
             android:layout_marginTop="@dimen/activity_vertical_margin"
             android:layout_marginBottom="@dimen/activity_vertical_margin"
             android:orientation="vertical">
@@ -241,8 +276,7 @@
             <ListView
                 android:id="@+id/add_food_lv_ingredients"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/home_section_padding" />
+                android:layout_height="wrap_content" />
 
         </LinearLayout>
 
@@ -266,19 +300,18 @@
             <Button
                 android:id="@+id/add_food_btn_cancel"
                 android:layout_width="0dp"
-                android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:text="@string/add_food_btn_cancel_label"/>
+                android:layout_weight="1"
+                android:text="@string/add_food_btn_cancel_label" />
 
             <Button
                 android:id="@+id/add_food_btn_submit"
                 android:layout_width="0dp"
-                android:layout_weight="1"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:text="@string/add_food_btn_label" />
 
         </LinearLayout>
-
 
 
     </RelativeLayout>

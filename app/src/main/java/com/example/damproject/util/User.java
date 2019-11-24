@@ -3,6 +3,11 @@ package com.example.damproject.util;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+
 import com.example.damproject.MainActivity;
 
 import java.io.Serializable;
@@ -11,14 +16,27 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+@Entity(tableName = "USERS")
 public class User implements Parcelable, Serializable {
+    @PrimaryKey(autoGenerate = true)
+    public int id;
+
+    @ColumnInfo(name = "username")
     private String username;
+    @ColumnInfo(name = "password")
     private String password;
+    @ColumnInfo(name = "birthday")
     private Date birthday;
+    @ColumnInfo(name = "weight")
     private int weight;
+    @ColumnInfo(name = "height")
     private int height;
 
     public User() {
+    }
+
+    public int getId() {
+        return id;
     }
 
     public int getAge() {
@@ -28,6 +46,7 @@ public class User implements Parcelable, Serializable {
     @Override
     public String toString() {
         return "User{" +
+                "id=" + id + '\'' +
                 "username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", birthday=" + birthday +
@@ -36,6 +55,7 @@ public class User implements Parcelable, Serializable {
                 '}';
     }
 
+    @Ignore
     public User(String username, String password, Date birthday, int weight, int height) {
         this.username = username;
         this.password = password;
@@ -44,6 +64,7 @@ public class User implements Parcelable, Serializable {
         this.height = height;
     }
 
+    @Ignore
     protected User(Parcel in) {
         username = in.readString();
         password = in.readString();
@@ -57,6 +78,7 @@ public class User implements Parcelable, Serializable {
         height = in.readInt();
     }
 
+    @Ignore
     public static final Creator<User> CREATOR = new Creator<User>() {
         @Override
         public User createFromParcel(Parcel in) {
