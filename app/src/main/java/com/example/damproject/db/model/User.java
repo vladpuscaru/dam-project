@@ -1,4 +1,4 @@
-package com.example.damproject.util;
+package com.example.damproject.db.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -16,10 +16,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-@Entity(tableName = "USERS")
+@Entity(tableName = "users")
 public class User implements Parcelable, Serializable {
     @PrimaryKey(autoGenerate = true)
-    public int id;
+    @ColumnInfo(name = "id")
+    public long id;
 
     @ColumnInfo(name = "username")
     private String username;
@@ -32,11 +33,16 @@ public class User implements Parcelable, Serializable {
     @ColumnInfo(name = "height")
     private int height;
 
+    @Ignore
     public User() {
     }
 
-    public int getId() {
+    public long getId() {
         return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public int getAge() {
@@ -55,7 +61,6 @@ public class User implements Parcelable, Serializable {
                 '}';
     }
 
-    @Ignore
     public User(String username, String password, Date birthday, int weight, int height) {
         this.username = username;
         this.password = password;
@@ -66,6 +71,7 @@ public class User implements Parcelable, Serializable {
 
     @Ignore
     protected User(Parcel in) {
+        id = in.readLong();
         username = in.readString();
         password = in.readString();
         try {
@@ -138,6 +144,7 @@ public class User implements Parcelable, Serializable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(id);
         dest.writeString(username);
         dest.writeString(password);
         String strBirthday = this.birthday != null ?

@@ -10,6 +10,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -23,16 +24,33 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.damproject.adapters.IngredientListAdapter;
+import com.example.damproject.db.AppDatabase;
 import com.example.damproject.fragments.HomeFragment;
-import com.example.damproject.util.FoodItem;
-import com.example.damproject.util.Ingredient;
+import com.example.damproject.db.model.FoodItem;
+import com.example.damproject.db.model.Ingredient;
 import com.example.damproject.util.UTIL;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
 public class AddFoodActivity extends AppCompatActivity {
+
+    private class InsertFood extends AsyncTask<FoodItem, Void, Long> {
+
+        @Override
+        protected Long doInBackground(FoodItem... foodItems) {
+            return AppDatabase.getInstance(getApplicationContext()).foodItemDao().insertFoodItem(foodItems[0]);
+        }
+    }
+
+    private class InsertIngredient extends AsyncTask<Ingredient, Void, Long> {
+
+        @Override
+        protected Long doInBackground(Ingredient... ingredients) {
+            return AppDatabase.getInstance(getApplicationContext()).ingredientDao().insertIngredient(ingredients[0]);
+        }
+    }
+
     public final static String NEW_FOOD_KEY = "new.food.key";
 
     public final static int REQUEST_PICTURE_CAPTURE = 0;
@@ -95,24 +113,7 @@ public class AddFoodActivity extends AppCompatActivity {
         tvIngredientInputError = findViewById(R.id.add_food_input_ingredients_error);
 
         hideErrors();
-
-        ArrayList<Ingredient> dbIngredients = new ArrayList<>();
-
-        dbIngredients.add(new Ingredient("Carnat", 280, 110, 50, 120));
-        dbIngredients.add(new Ingredient("Ceapa", 80, 10, 50, 30));
-        dbIngredients.add(new Ingredient("Paine", 280, 110, 50, 30));
-        dbIngredients.add(new Ingredient("Salam Sinaia", 580, 110, 50, 30));
-        dbIngredients.add(new Ingredient("Ulei de masline", 880, 510, 50, 320));
-        dbIngredients.add(new Ingredient("Caviar", 380, 110, 240, 30));
-        dbIngredients.add(new Ingredient("Parizer", 80, 40, 10, 30));
-
-        ArrayList<String> ingredientsNames = new ArrayList<>();
-        for (Ingredient i : dbIngredients) {
-            ingredientsNames.add(i.getName());
-        }
-
-        ArrayAdapter spinnerAdapter = new ArrayAdapter(getApplicationContext(), R.layout.support_simple_spinner_dropdown_item, ingredientsNames);
-        spnIngredients.setAdapter(spinnerAdapter);
+        setSpnIngredients();
 
         IngredientListAdapter listAdapter = new IngredientListAdapter(getApplicationContext(), ingredients);
         lvIngredients.setAdapter(listAdapter);
@@ -152,7 +153,13 @@ public class AddFoodActivity extends AppCompatActivity {
                 switch (getActiveButton()) {
                     case 1:
                         if (validateIngredient()) {
-                            ingredients.add(createIngredientFromView());
+                            Ingredient i = createIngredientFromView();
+
+                            ingredients.add(i);
+
+                            // add ingredient to db
+                            new InsertIngredient().execute(i);
+
                             clearIngredientForm();
                             Log.d("ADDINGREDIENT", "I am here!");
                             IngredientListAdapter adapter = (IngredientListAdapter) lvIngredients.getAdapter();
@@ -172,6 +179,10 @@ public class AddFoodActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (validateFood()) {
                     FoodItem foodItem = createFoodFromView();
+
+                    // insert to db
+                    new InsertFood().execute(foodItem);
+
                     Intent intent = new Intent(getApplicationContext(), HomeFragment.class);
                     Bundle bundle = new Bundle();
                     bundle.putParcelable(NEW_FOOD_KEY, foodItem);
@@ -221,6 +232,13 @@ public class AddFoodActivity extends AppCompatActivity {
                 builder.show();
             }
         });
+    }
+
+    private void setSpnIngredients() {
+        // TODO: do async
+        List<Ingredient> ingredients = AppDatabase.getInstance(getApplicationContext()).ingredientDao().getAllIngredients();
+        ArrayAdapter spinnerAdapter = new ArrayAdapter(getApplicationContext(), R.layout.support_simple_spinner_dropdown_item, ingredients);
+        spnIngredients.setAdapter(spinnerAdapter);
     }
 
     @Override

@@ -2,35 +2,27 @@ package com.example.damproject;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.room.Room;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.amitshekhar.DebugDB;
 import com.example.damproject.db.AppDatabase;
-import com.example.damproject.util.User;
+import com.example.damproject.db.model.User;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.ObjectInputStream;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 public class LoginActivity extends AppCompatActivity {
     public static final String USER_KEY = "login.user.key";
     public static final int CREATE_USER_REQUEST = 1;
-
-    public static AppDatabase DATABASE;
 
 
     private EditText etUsername;
@@ -51,12 +43,6 @@ public class LoginActivity extends AppCompatActivity {
 
 
     private void initComponents() {
-        DATABASE = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "FAAP-DATABASE").allowMainThreadQueries().build();
-
-        List<User> users = DATABASE.userDao().getAllUsers();
-        for (User user : users) {
-            Log.d("AllUsers", user.toString());
-        }
 
         etUsername = findViewById(R.id.login_et_username);
         etPassword = findViewById(R.id.login_et_password);
@@ -105,7 +91,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private User validateUser() {
-        List<User> users = DATABASE.userDao().getAllUsers();
+        List<User> users = AppDatabase.getInstance(getApplicationContext()).userDao().getAllUsers();
         User user = null;
 
         for (User u : users) {

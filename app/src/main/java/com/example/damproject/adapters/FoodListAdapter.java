@@ -14,7 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.damproject.R;
-import com.example.damproject.util.FoodItem;
+import com.example.damproject.db.model.FoodItem;
 
 
 
@@ -82,8 +82,6 @@ public class FoodListAdapter extends ArrayAdapter<FoodItem> {
         params = (LinearLayout.LayoutParams) viewHolder.tvFoodProteins.getLayoutParams();
         params.weight = current.getProteinsPercentage();
         viewHolder.tvFoodProteins.setLayoutParams(params);
-
-        Log.d("comeon", current.toString());
 
         return convertView;
     }

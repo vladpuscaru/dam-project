@@ -2,7 +2,11 @@ package com.example.damproject;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -10,27 +14,46 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.damproject.db.AppDatabase;
 import com.example.damproject.fragments.HomeFragment;
 import com.example.damproject.util.InputError;
-import com.example.damproject.util.User;
+import com.example.damproject.db.model.User;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.ObjectInputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
 public class RegisterActivity extends AppCompatActivity {
+
+    private class UpdateUser extends AsyncTask<User, Void, Integer> {
+
+        @Override
+        protected Integer doInBackground(User... users) {
+            return AppDatabase.getInstance(getApplicationContext()).userDao().updateUser(users[0]);
+        }
+    }
+
+    private class InsertUser extends AsyncTask<User, Void, Long> {
+
+        @Override
+        protected Long doInBackground(User... users) {
+            return AppDatabase.getInstance(getApplicationContext()).userDao().insertUser(users[0]);
+        }
+    };
+
     public final static String EDITED_USER_KEY = "new.user.key";
     public final static String USERNAME_KEY = "username.key";
     public final static String PASSOWRD_KEY = "password.key";
 
     private User loggedUser;
-    private String oldUsername;
 
     private InputError inputError;
 
@@ -39,12 +62,16 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText etPassword;
     private EditText etConfirmPassowrd;
     private EditText etBirthday;
-    private DatePicker dpBirthday;
     private EditText etWeight;
     private EditText etHeight;
     private Button btnRegister;
     private Button btnCancel;
+    private Button btnOpenDatePicker;
     private TextView tvErrorReport;
+
+
+    private DatePickerDialog.OnDateSetListener mDateSetListener;
+
 
     private List<EditText> etInvalid = new ArrayList<>();
 
@@ -79,12 +106,12 @@ public class RegisterActivity extends AppCompatActivity {
         etPassword = findViewById(R.id.register_et_password);
         etConfirmPassowrd = findViewById(R.id.register_et_confirm_password);
         etBirthday = findViewById(R.id.register_et_birthday);
-        dpBirthday = findViewById(R.id.register_dp_birthday);
         etWeight = findViewById(R.id.register_et_weight);
         etHeight = findViewById(R.id.register_et_height);
         tvErrorReport = findViewById(R.id.register_tv_error_report);
         btnRegister = findViewById(R.id.register_btn_register);
         btnCancel = findViewById(R.id.register_btn_cancel);
+        btnOpenDatePicker = findViewById(R.id.register_btn_open_dp);
 
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,16 +124,23 @@ public class RegisterActivity extends AppCompatActivity {
                         intent.putExtra(USERNAME_KEY, etUsername.getText().toString());
                         intent.putExtra(PASSOWRD_KEY, etPassword.getText().toString());
                         // Add user to database
-                        LoginActivity.DATABASE.userDao().insertUser(createUserFromView());
+                        new InsertUser().execute(createUserFromView());
                     }
                     // edited a current user
                     else {
+                        long id = loggedUser.getId();
+                        loggedUser = createUserFromView();
+                        loggedUser.setId(id);
+
                         intent = new Intent(getApplicationContext(), HomeFragment.class);
                         Bundle bundle = new Bundle();
-                        bundle.putParcelable(EDITED_USER_KEY, createUserFromView());
+                        bundle.putParcelable(EDITED_USER_KEY, loggedUser);
                         intent.putExtras(bundle);
                         // Edit user in the database
-                        LoginActivity.DATABASE.userDao().updateUser(loggedUser);
+                        new UpdateUser().execute(loggedUser);
+
+                        Log.d("WTF", loggedUser.toString());
+                        Log.d("WTF", AppDatabase.getInstance(getApplicationContext()).userDao().getAllUsers().toString());
                     }
                     setResult(RESULT_OK, intent);
                     finish();
@@ -132,6 +166,32 @@ public class RegisterActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        btnOpenDatePicker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Calendar cal = Calendar.getInstance();
+                int year = cal.get(Calendar.YEAR);
+                int month = cal.get(Calendar.MONTH);
+                int day = cal.get(Calendar.DAY_OF_MONTH);
+
+                DatePickerDialog dialog = new DatePickerDialog(
+                        RegisterActivity.this,
+                        android.R.style.Theme_DeviceDefault,
+                        mDateSetListener,
+                        year, month, day);
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.GRAY));
+                dialog.show();
+            }
+        });
+
+        mDateSetListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                etBirthday.setText(String.format(Locale.US, "%d-%d-%d", dayOfMonth, month, year));
+            }
+        };
+
     }
 
     private boolean validate() {

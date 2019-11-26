@@ -4,6 +4,7 @@
     <string name="menu_item_journal">Journal</string>
     <string name="menu_item_history">History</string>
     <string name="menu_item_settings">About</string>
+    <string name="menu_item_food_list">Recipes</string>
     <string name="login_et_name">username</string>
     <string name="login_et_password">password</string>
     <string name="login_btn_submit">Submit</string>
@@ -18,7 +19,7 @@
 
     <!-- TODO: Delete test_text before finishing  -->
     <string name="test_text">Lorem ipsum</string>
-    <!--    -->
+    <!-- TODO: Delete test_text before finishing  -->
 
     <string name="home_section_2_title">TODAY\'S TRACK</string>
     <string name="home_subsection_food_title">FOOD</string>
@@ -79,4 +80,8 @@
         <item>Track daily food consumption</item>
         <item>Create new recipes</item>
     </string-array>
+
+    <string name="food_list_btn_search_label">Search</string>
+    <string name="food_list_et_search_hint">eg: chicken, egg, bread</string>
+    <string name="adapter_recipe_ingredients_label">Ingredients</string>
 </resources>

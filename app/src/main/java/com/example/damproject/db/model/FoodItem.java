@@ -1,47 +1,44 @@
-package com.example.damproject.util;
+package com.example.damproject.db.model;
 
 import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
-import androidx.room.ForeignKey;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity(foreignKeys = @ForeignKey(entity = User.class,
-                                  parentColumns = "id",
-                                  childColumns = "user_id"))
+@Entity(tableName = "food_items")
 public class FoodItem implements Parcelable {
-    @PrimaryKey
-    private int id;
-
-    @ColumnInfo(name = "user_id")
-    private int user_id;
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "id")
+    private long id;
 
     @ColumnInfo(name = "name")
     private String name;
     @ColumnInfo(name = "ingredients")
     private List<Ingredient> ingredients = new ArrayList<>();
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public int getUser_id() {
-        return user_id;
+    public void setId(long id) {
+        this.id = id;
     }
 
+    @Ignore
     public FoodItem() {
     }
 
+    @Ignore
     protected FoodItem(Parcel in) {
+        id = in.readLong();
         name = in.readString();
         int size = in.readInt();
         for (int i = 0; i < size; i++) {
@@ -112,6 +109,7 @@ public class FoodItem implements Parcelable {
     @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(id);
         dest.writeString(name);
         dest.writeInt(ingredients.size());
         for (Ingredient i : ingredients) {

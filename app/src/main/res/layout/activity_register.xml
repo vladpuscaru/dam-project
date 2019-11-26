@@ -145,20 +145,14 @@
                     android:textSize="@dimen/register_text_size" />
 
                 <Button
+                    android:id="@+id/register_btn_open_dp"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="0.2"
-                    android:background="@drawable/ic_home_black_24dp" />
+                    android:background="@drawable/ic_calendar" />
 
             </LinearLayout>
 
-
-            <DatePicker
-                android:id="@+id/register_dp_birthday"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:visibility="gone" />
 
         </LinearLayout>
 
@@ -282,19 +276,19 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:background="@color/colorFat"
-            android:textColor="@android:color/white"
             android:layout_weight="1"
+            android:background="@color/colorFat"
             android:padding="@dimen/register_button_padding"
-            android:text="@string/register_btn_cancel" />
+            android:text="@string/register_btn_cancel"
+            android:textColor="@android:color/white" />
 
         <Button
             android:id="@+id/register_btn_register"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
+            android:layout_weight="1"
             android:background="@color/colorButton"
             android:padding="@dimen/register_button_padding"
             android:text="@string/register_btn_register"

@@ -1,19 +1,45 @@
-package com.example.damproject.util;
+package com.example.damproject.db.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+
+@Entity(tableName = "ingredients")
 public class Ingredient implements Parcelable {
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "id")
+    private long id;
+
+    @ColumnInfo(name = "name")
     private String name;
+    @ColumnInfo(name = "calories")
     private int calories;
+    @ColumnInfo(name = "carbohydrates")
     private int carbohydrates;
+    @ColumnInfo(name = "fats")
     private int fats;
+    @ColumnInfo(name = "proteins")
     private int proteins;
 
+    @Ignore
     public Ingredient() {
     }
 
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    @Ignore
     protected Ingredient(Parcel in) {
+        id = in.readLong();
         name = in.readString();
         calories = in.readInt();
         carbohydrates = in.readInt();
@@ -21,6 +47,7 @@ public class Ingredient implements Parcelable {
         proteins = in.readInt();
     }
 
+    @Ignore
     public static final Creator<Ingredient> CREATOR = new Creator<Ingredient>() {
         @Override
         public Ingredient createFromParcel(Parcel in) {
@@ -98,6 +125,7 @@ public class Ingredient implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(id);
         dest.writeString(name);
         dest.writeInt(calories);
         dest.writeInt(carbohydrates);

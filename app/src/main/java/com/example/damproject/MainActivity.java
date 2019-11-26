@@ -1,22 +1,20 @@
 package com.example.damproject;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.MenuItem;
 
-import com.example.damproject.db.AppDatabase;
+import com.example.damproject.fragments.FoodListFragment;
 import com.example.damproject.fragments.HistoryFragment;
 import com.example.damproject.fragments.HomeFragment;
 import com.example.damproject.fragments.JournalFragment;
 import com.example.damproject.fragments.AboutFragment;
-import com.example.damproject.util.User;
+import com.example.damproject.db.model.User;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.room.Room;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -57,6 +55,9 @@ public class MainActivity extends AppCompatActivity {
                         case R.id.nav_home:
                             currentFragment = createHomeFragment();
                             break;
+                        case R.id.nav_foodList:
+                            currentFragment = createFoodListFragment();
+                            break;
                         case R.id.nav_journal:
                             currentFragment = createJournalFragment();
                             break;
@@ -86,6 +87,11 @@ public class MainActivity extends AppCompatActivity {
             currentFragment = createHomeFragment();
             openFragment();
         }
+    }
+
+    private Fragment createFoodListFragment() {
+        Fragment fragment = new FoodListFragment();
+        return fragment;
     }
 
     private Fragment createHomeFragment() {

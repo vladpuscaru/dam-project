@@ -1,11 +1,11 @@
-package com.example.damproject.db;
+package com.example.damproject.db.dao;
 
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
 
-import com.example.damproject.util.User;
+import com.example.damproject.db.model.User;
 
 import java.util.List;
 
@@ -18,8 +18,8 @@ public interface UserDao {
     User getUserByUsername(String username);
 
     @Insert
-    void insertUser(User user);
+    long insertUser(User user);
 
     @Update
-    void updateUser(User user);
+    int updateUser(User user);
 }

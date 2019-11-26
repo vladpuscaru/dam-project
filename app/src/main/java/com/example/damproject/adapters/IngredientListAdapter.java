@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.damproject.R;
-import com.example.damproject.util.Ingredient;
+import com.example.damproject.db.model.Ingredient;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -31,7 +31,7 @@ public class IngredientListAdapter extends ArrayAdapter<Ingredient> {
     }
 
     public IngredientListAdapter(@NonNull Context context, ArrayList<Ingredient> data) {
-        super(context, R.layout.adapter_ingredient_item,data);
+        super(context, R.layout.adapter_ingredient_item, data);
         this.data = data;
         this.context = context;
     }
