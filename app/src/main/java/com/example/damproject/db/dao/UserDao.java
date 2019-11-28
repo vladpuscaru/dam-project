@@ -14,8 +14,8 @@ public interface UserDao {
     @Query("SELECT * FROM USERS")
     List<User> getAllUsers();
 
-    @Query("SELECT * FROM USERS WHERE username = :username")
-    User getUserByUsername(String username);
+    @Query("SELECT * FROM USERS WHERE username = :username AND password = :password")
+    User getUserByCredentials(String username, String password);
 
     @Query("SELECT MAX(id) FROM USERS")
     long getMaxId();
@@ -25,4 +25,6 @@ public interface UserDao {
 
     @Update
     int updateUser(User user);
+
+
 }
