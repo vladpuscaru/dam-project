@@ -3,11 +3,172 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="@dimen/app_padding"
     tools:context=".fragments.JournalFragment">
 
-    <TextView
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="journal fragment" />
+        android:layout_height="wrap_content">
+
+
+        <TextView
+            android:id="@+id/journal_tv_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/journal_title"
+            android:textAlignment="center"
+            android:textSize="@dimen/home_subsection_title_size" />
+
+        <TextView
+            android:id="@+id/journal_tv_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/journal_tv_title"
+            android:text="@string/journal_description"
+            android:textAlignment="center" />
+
+        <TextView
+            android:id="@+id/journal_tv_instructions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/journal_tv_description"
+            android:layout_marginTop="@dimen/app_padding"
+            android:text="@string/journal_instructions" />
+
+        <!-- Input Food name -->
+        <LinearLayout
+            android:id="@+id/journal_input_food_regex"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/journal_tv_instructions"
+            android:layout_marginTop="@dimen/app_padding"
+            android:orientation="horizontal">
+
+            <CheckBox
+                android:id="@+id/journal_cb_food_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="0.1" />
+
+            <TextView
+                android:id="@+id/journal_tv_label_food_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/register_input_margin_left"
+                android:layout_marginRight="@dimen/register_input_margin_left"
+                android:layout_weight="0.2"
+
+                android:text="@string/journal_input_food_regex_label"
+                android:textColor="@android:color/darker_gray" />
+
+            <EditText
+                android:id="@+id/journal_et_food_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.6"
+                android:hint="@string/journal_input_food_regex_hint"
+                android:inputType="text"
+                android:textColor="@android:color/darker_gray" />
+
+        </LinearLayout>
+        <!-- Input Ingredients -->
+        <LinearLayout
+            android:id="@+id/journal_input_ingredient_regex"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/journal_input_food_regex"
+            android:orientation="horizontal">
+
+            <CheckBox
+                android:id="@+id/journal_cb_ingredients"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="0.1" />
+
+            <TextView
+                android:id="@+id/journal_tv_label_ingredients"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/register_input_margin_left"
+
+                android:layout_marginRight="@dimen/register_input_margin_left"
+                android:layout_weight="0.2"
+                android:text="@string/journal_input_ingredients_regex_label"
+                android:textColor="@android:color/darker_gray" />
+
+            <EditText
+                android:id="@+id/journal_et_ingredients"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.6"
+                android:hint="@string/journal_input_ingredients_regex_hint"
+                android:inputType="text"
+                android:textColor="@android:color/darker_gray" />
+
+        </LinearLayout>
+
+        <!-- Input Date -->
+        <LinearLayout
+            android:id="@+id/journal_input_date_regex"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/journal_input_ingredient_regex"
+            android:orientation="horizontal">
+
+            <CheckBox
+                android:id="@+id/journal_cb_date"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="0.1" />
+
+            <TextView
+                android:id="@+id/journal_tv_label_date"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/register_input_margin_left"
+                android:layout_marginRight="@dimen/register_input_margin_left"
+                android:layout_weight="0.2"
+                android:text="@string/journal_input_date_regex_label"
+                android:textColor="@android:color/darker_gray" />
+
+            <EditText
+                android:id="@+id/journal_et_date"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.6"
+                android:hint="@string/journal_input_date_regex_hint"
+                android:inputType="date"
+                android:textColor="@android:color/darker_gray" />
+
+        </LinearLayout>
+
+        <!-- Button Search -->
+        <Button
+            android:id="@+id/journal_btn_search"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/journal_input_date_regex"
+            android:text="@string/journal_btn_submit_label" />
+
+        <!-- Generated list -->
+        <ListView
+            android:id="@+id/journal_lv_result"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/journal_btn_search" />
+
+        <!-- Progress -->
+        <ProgressBar
+            android:id="@+id/journal_pb"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="match_parent"
+            android:layout_alignParentBottom="true"
+            android:visibility="gone"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
 
 </FrameLayout>

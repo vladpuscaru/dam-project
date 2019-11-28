@@ -3,7 +3,6 @@ package com.example.damproject.db;
 import androidx.room.TypeConverter;
 
 import com.example.damproject.db.model.Ingredient;
-import com.example.damproject.util.MenuType;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -64,15 +63,5 @@ public class DbConverters {
         list.setLength(list.length() - 1);
 
         return list.toString();
-    }
-
-    @TypeConverter
-    public static MenuType fromStringMenuType(String value) {
-        return value == null ? null : MenuType.valueOf(value);
-    }
-
-    @TypeConverter
-    public static String menuTypeToString(MenuType menuType) {
-        return menuType == null ? null : menuType.toString();
     }
 }

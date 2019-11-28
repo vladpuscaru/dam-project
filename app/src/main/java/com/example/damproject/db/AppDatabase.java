@@ -9,14 +9,12 @@ import androidx.room.TypeConverters;
 
 import com.example.damproject.db.dao.FoodItemDao;
 import com.example.damproject.db.dao.IngredientDao;
-import com.example.damproject.db.dao.MenuDao;
 import com.example.damproject.db.dao.UserDao;
 import com.example.damproject.db.model.FoodItem;
 import com.example.damproject.db.model.Ingredient;
-import com.example.damproject.db.model.Menu;
 import com.example.damproject.db.model.User;
 
-@Database(entities = {User.class, FoodItem.class, Ingredient.class, Menu.class}, version = 2, exportSchema = false)
+@Database(entities = {User.class, FoodItem.class, Ingredient.class}, version = 9, exportSchema = false)
 @TypeConverters({DbConverters.class})
 public abstract class AppDatabase extends RoomDatabase {
     private static final String DB_NAME = "faap_db";
@@ -43,6 +41,5 @@ public abstract class AppDatabase extends RoomDatabase {
 
     public abstract UserDao userDao();
     public abstract FoodItemDao foodItemDao();
-    public abstract MenuDao menuDao();
     public abstract IngredientDao ingredientDao();
 }

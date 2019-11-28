@@ -8,7 +8,7 @@
     <string name="login_et_name">username</string>
     <string name="login_et_password">password</string>
     <string name="login_btn_submit">Submit</string>
-    <string name="copy">© Vlad Puscaru 2019. FAPA - Fit As A Plant. All rights reserverd</string>
+    <string name="copy">© Vlad Puscaru 2019. FAPA - Fit As A Plant.</string>
     <string name="login_et_username_hint">Username</string>
     <string name="login_et_password_hint">Password</string>
     <string name="login_btn_login">Log in</string>
@@ -21,9 +21,9 @@
     <string name="test_text">Lorem ipsum</string>
     <!-- TODO: Delete test_text before finishing  -->
 
-    <string name="home_section_2_title">TODAY\'S TRACK</string>
+    <string name="home_section_2_title">Today\'s track</string>
     <string name="home_subsection_food_title">FOOD</string>
-    <string name="home_subsection_food_button">+</string>
+    <string name="home_subsection_food_button">ADD FOOD TO </string>
     <string name="home_btn_subsection_food_breakfast">BREAKFAST</string>
     <string name="home_btn_subsection_food_lunch">LUNCH</string>
     <string name="home_btn_subsection_food_dinner">DINNER</string>
@@ -67,7 +67,7 @@
 
     <string-array name="weights_array">
         <item>kg</item>
-        <item>pounds</item>
+        <item>lbs</item>
     </string-array>
 
     <string-array name="heights_array">
@@ -84,4 +84,17 @@
     <string name="food_list_btn_search_label">Search</string>
     <string name="food_list_et_search_hint">eg: chicken, egg, bread</string>
     <string name="adapter_recipe_ingredients_label">Ingredients</string>
+    <string name="about_quote">\"It\'s not much..but it\'s honest work\"</string>
+    <string name="add_food_add_ingredient_description">Fill the form below to add a new ingredient</string>
+    <string name="journal_title">Personal journal</string>
+    <string name="journal_description">Here you can generate reports about your food consumptions. Empty inputs generate a list of all the food you\'ve registered in the app</string>
+    <string name="journal_input_food_regex_label">Food name:</string>
+    <string name="journal_input_food_regex_hint">eg: chicken</string>
+    <string name="journal_input_ingredients_regex_label">Ingredients:</string>
+    <string name="journal_input_ingredients_regex_hint">eg: onion, bread</string>
+    <string name="journal_input_date_regex_label">Registered:</string>
+    <string name="journal_input_date_regex_hint">eg: 20-20-2019</string>
+    <string name="journal_btn_submit_label">SEARCH</string>
+    <string name="journal_instructions">Click on the field you want to base the query on, fill the input and press the search button. Altirnatively, you can leave all fields unchecked and retreive all the items</string>
+    <string name="home_subsection_food_delete_button">DELETE Selected Items</string>
 </resources>

@@ -1,10 +1,13 @@
 package com.example.damproject;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 
+import com.example.damproject.db.AppDatabase;
+import com.example.damproject.db.model.FoodItem;
 import com.example.damproject.fragments.FoodListFragment;
-import com.example.damproject.fragments.HistoryFragment;
 import com.example.damproject.fragments.HomeFragment;
 import com.example.damproject.fragments.JournalFragment;
 import com.example.damproject.fragments.AboutFragment;
@@ -16,12 +19,30 @@ import androidx.fragment.app.Fragment;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+
 
 public class MainActivity extends AppCompatActivity {
     public static final String DATE_FORMAT = "dd-MM-yyyy";
-    public final static String USERS_FILE = "files.user.bin";
+    public final static String BREAKFAST_LIST_KEY = "breakfast.key.list";
+    public final static String LUNCH_LIST_KEY = "lunch.key.list";
+    public final static String DINNER_LIST_KEY = "dinner.key.list";
+    public final static String SNACKS_LIST_KEY = "snacks.key.list";
+
+    public static final SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat(DATE_FORMAT, Locale.US);
+
+    public static Date TODAY;
 
     private User loggedUser;
+    private ArrayList<FoodItem> foodBreakfast = new ArrayList<>();
+    private ArrayList<FoodItem> foodLunch = new ArrayList<>();
+    private ArrayList<FoodItem> foodDinner = new ArrayList<>();
+    private ArrayList<FoodItem> foodSnacks = new ArrayList<>();
 
     private Fragment currentFragment;
     private BottomNavigationView bottomNavigationView;
@@ -31,9 +52,37 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        try {
+            TODAY = DATE_FORMATTER.parse(DATE_FORMATTER.format(new Date()));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
         initComponents();
 
+        new AsyncTask<Void, Void, List<FoodItem>>() {
 
+            @Override
+            protected List<FoodItem> doInBackground(Void... voids) {
+                return AppDatabase.getInstance(getApplicationContext()).foodItemDao().getFoodItemsByDateAndUserId(TODAY, loggedUser.getId());
+            }
+
+            @Override
+            protected void onPostExecute(List<FoodItem> foodItems) {
+                for (FoodItem f : foodItems) {
+                    if (f.getType().equals("breakfast")) {
+                        foodBreakfast.add(f);
+                    } else if (f.getType().equals("lunch")) {
+                        foodLunch.add(f);
+                    } else if (f.getType().equals("dinner")) {
+                        foodDinner.add(f);
+                    } else {
+                        foodSnacks.add(f);
+                    }
+                }
+            }
+        }.execute();
 
         openDefaultFragment(savedInstanceState);
     }
@@ -60,9 +109,6 @@ public class MainActivity extends AppCompatActivity {
                             break;
                         case R.id.nav_journal:
                             currentFragment = createJournalFragment();
-                            break;
-                        case R.id.nav_history:
-                            currentFragment = createHistoryFragment();
                             break;
                         case R.id.nav_about:
                             currentFragment = createAboutFragment();
@@ -98,6 +144,10 @@ public class MainActivity extends AppCompatActivity {
         Fragment fragment = new HomeFragment();
         Bundle bundle = new Bundle();
         bundle.putParcelable(LoginActivity.USER_KEY, loggedUser);
+        bundle.putParcelableArrayList(BREAKFAST_LIST_KEY, foodBreakfast);
+        bundle.putParcelableArrayList(LUNCH_LIST_KEY, foodLunch);
+        bundle.putParcelableArrayList(DINNER_LIST_KEY, foodDinner);
+        bundle.putParcelableArrayList(SNACKS_LIST_KEY, foodSnacks);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -107,11 +157,6 @@ public class MainActivity extends AppCompatActivity {
         Bundle bundle = new Bundle();
         bundle.putString(LoginActivity.USER_KEY, loggedUser.getUsername());
         fragment.setArguments(bundle);
-        return fragment;
-    }
-
-    private Fragment createHistoryFragment() {
-        Fragment fragment = new HistoryFragment();
         return fragment;
     }
 

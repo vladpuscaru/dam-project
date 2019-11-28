@@ -11,6 +11,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -22,16 +23,20 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.damproject.adapters.IngredientListAdapter;
 import com.example.damproject.db.AppDatabase;
+import com.example.damproject.db.model.User;
 import com.example.damproject.fragments.HomeFragment;
 import com.example.damproject.db.model.FoodItem;
 import com.example.damproject.db.model.Ingredient;
 import com.example.damproject.util.UTIL;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class AddFoodActivity extends AppCompatActivity {
 
@@ -39,15 +44,20 @@ public class AddFoodActivity extends AppCompatActivity {
 
         @Override
         protected Long doInBackground(FoodItem... foodItems) {
-            return AppDatabase.getInstance(getApplicationContext()).foodItemDao().insertFoodItem(foodItems[0]);
-        }
-    }
+            long maxId = AppDatabase.getInstance(getApplicationContext()).foodItemDao().getMaxId();
+            foodItems[0].setId(maxId + 1);
+            foodItems[0].setType(foodType);
+            foodItems[0].setDate(MainActivity.TODAY);
 
-    private class InsertIngredient extends AsyncTask<Ingredient, Void, Long> {
+            long id = AppDatabase.getInstance(getApplicationContext()).foodItemDao().insertFoodItem(foodItems[0]);
 
-        @Override
-        protected Long doInBackground(Ingredient... ingredients) {
-            return AppDatabase.getInstance(getApplicationContext()).ingredientDao().insertIngredient(ingredients[0]);
+            for (Ingredient i : foodItems[0].getIngredients()) {
+                i.setFoodId(foodItems[0].getId());
+                // add ingredient to db
+                AppDatabase.getInstance(getApplicationContext()).ingredientDao().insertIngredient(i);
+            }
+
+            return id;
         }
     }
 
@@ -58,11 +68,12 @@ public class AddFoodActivity extends AppCompatActivity {
 
     private ArrayList<Ingredient> ingredients = new ArrayList<>();
     private String errorMessage;
+    private User loggedUser;
+
+    private String foodType;
 
     // UI components
     private EditText etFoodName;
-    private Button btnCreateIngredient;
-    private Button btnChooseIngredient;
     private Button btnAddIngredient;
     private Button btnSubmit;
     private Button btnCancel;
@@ -74,10 +85,6 @@ public class AddFoodActivity extends AppCompatActivity {
     private EditText etIngredientFats;
     private EditText etIngredientProteins;
     private ListView lvIngredients;
-    private Spinner spnIngredients;
-
-    private View ingredientsChoose;
-    private View ingredientsCreate;
 
     private TextView tvInputError;
     private TextView tvIngredientInputError;
@@ -89,12 +96,20 @@ public class AddFoodActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_food);
 
         initComponents();
+
+        Bundle bundle = getIntent().getExtras();
+
+        if (bundle != null) {
+            loggedUser = bundle.getParcelable(HomeFragment.LOGGED_USER_KEY);
+            foodType = bundle.getString(HomeFragment.FOOD_TYPE_KEY);
+        } else {
+            loggedUser = null;
+            foodType = "unknown";
+        }
     }
 
     private void initComponents() {
         etFoodName = findViewById(R.id.add_food_et_name);
-        btnCreateIngredient = findViewById(R.id.add_food_btn_create_ingredient);
-        btnChooseIngredient = findViewById(R.id.add_food_btn_choose_ingredient);
         btnAddIngredient = findViewById(R.id.add_food_btn_add_ingredient);
         btnSubmit = findViewById(R.id.add_food_btn_submit);
         btnCancel = findViewById(R.id.add_food_btn_cancel);
@@ -106,70 +121,31 @@ public class AddFoodActivity extends AppCompatActivity {
         etIngredientFats = findViewById(R.id.add_food_ingredient_et_fats);
         etIngredientProteins = findViewById(R.id.add_food_ingredient_et_proteins);
         lvIngredients = findViewById(R.id.add_food_lv_ingredients);
-        ingredientsChoose = findViewById(R.id.add_food_input_ingredients_choose);
-        ingredientsCreate = findViewById(R.id.add_food_input_ingredients_create);
-        spnIngredients = findViewById(R.id.add_food_spn_ingredients);
         tvInputError = findViewById(R.id.add_food_input_error);
         tvIngredientInputError = findViewById(R.id.add_food_input_ingredients_error);
 
         hideErrors();
-        setSpnIngredients();
 
         IngredientListAdapter listAdapter = new IngredientListAdapter(getApplicationContext(), ingredients);
         lvIngredients.setAdapter(listAdapter);
         UTIL.setListViewHeightBasedOnChildren(lvIngredients);
 
-        deActivateButtons();
-        setButtonActive(btnCreateIngredient.getId());
-
-        deActiveateMods();
-        setActiveMode();
-
-
-        btnChooseIngredient.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                deActivateButtons();
-                deActiveateMods();
-
-                setButtonActive(btnChooseIngredient.getId());
-                setActiveMode();
-            }
-        });
-        btnCreateIngredient.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                deActivateButtons();
-                deActiveateMods();
-
-                setButtonActive(btnCreateIngredient.getId());
-                setActiveMode();
-            }
-        });
-
         btnAddIngredient.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                switch (getActiveButton()) {
-                    case 1:
-                        if (validateIngredient()) {
-                            Ingredient i = createIngredientFromView();
+                if (validateIngredient()) {
+                    Ingredient i = createIngredientFromView();
+                    ingredients.add(i);
 
-                            ingredients.add(i);
 
-                            // add ingredient to db
-                            new InsertIngredient().execute(i);
 
-                            clearIngredientForm();
-                            Log.d("ADDINGREDIENT", "I am here!");
-                            IngredientListAdapter adapter = (IngredientListAdapter) lvIngredients.getAdapter();
-                            adapter.notifyDataSetChanged();
-                            UTIL.setListViewHeightBasedOnChildren(lvIngredients);
-                        } else {
-                            showIngredientErrors();
-                        }
-                        break;
-                    case 2: break;
+                    clearIngredientForm();
+                    Log.d("ADDINGREDIENT", "I am here!");
+                    IngredientListAdapter adapter = (IngredientListAdapter) lvIngredients.getAdapter();
+                    adapter.notifyDataSetChanged();
+                    UTIL.setListViewHeightBasedOnChildren(lvIngredients);
+                } else {
+                    showIngredientErrors();
                 }
             }
         });
@@ -179,6 +155,8 @@ public class AddFoodActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (validateFood()) {
                     FoodItem foodItem = createFoodFromView();
+                    foodItem.setUserId(loggedUser.getId());
+                    foodItem.setIngredients(ingredients);
 
                     // insert to db
                     new InsertFood().execute(foodItem);
@@ -234,13 +212,6 @@ public class AddFoodActivity extends AppCompatActivity {
         });
     }
 
-    private void setSpnIngredients() {
-        // TODO: do async
-        List<Ingredient> ingredients = AppDatabase.getInstance(getApplicationContext()).ingredientDao().getAllIngredients();
-        ArrayAdapter spinnerAdapter = new ArrayAdapter(getApplicationContext(), R.layout.support_simple_spinner_dropdown_item, ingredients);
-        spnIngredients.setAdapter(spinnerAdapter);
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (resultCode == RESULT_OK && data != null) {
@@ -280,7 +251,10 @@ public class AddFoodActivity extends AppCompatActivity {
 
     private void highlightInvalidInputs() {
         for (View v : invalidInputs) {
-            v.setBackgroundColor(getResources().getColor(android.R.color.holo_red_light));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                v.setBackground(getResources().getDrawable(R.drawable.error_input_background));
+            }
+//            v.setBackgroundColor(getResources().getColor(android.R.color.holo_red_light));
         }
     }
 
@@ -501,40 +475,5 @@ public class AddFoodActivity extends AppCompatActivity {
         }
         return ok;
     }
-
-    private int getActiveButton() {
-        int n = -1;
-        if (!btnCreateIngredient.isEnabled())
-            n = 1;
-        else if (!btnChooseIngredient.isEnabled())
-            n = 2;
-        return n;
-    }
-
-    private void deActiveateMods() {
-        ingredientsChoose.setVisibility(View.GONE);
-        ingredientsCreate.setVisibility(View.GONE);
-    }
-
-    private void setActiveMode() {
-        if (!btnCreateIngredient.isEnabled())
-            ingredientsCreate.setVisibility(View.VISIBLE);
-        else if (!btnChooseIngredient.isEnabled())
-            ingredientsChoose.setVisibility(View.VISIBLE);
-    }
-
-    private void setButtonActive(int id) {
-        Button button = findViewById(id);
-        button.setTextColor(getResources().getColor(R.color.colorButton));
-        button.setEnabled(false);
-    }
-
-    private void deActivateButtons() {
-        btnChooseIngredient.setEnabled(true);
-        btnChooseIngredient.setTextColor(getResources().getColor(R.color.colorAccent));
-        btnCreateIngredient.setEnabled(true);
-        btnCreateIngredient.setTextColor(getResources().getColor(R.color.colorAccent));
-    }
-
 
 }

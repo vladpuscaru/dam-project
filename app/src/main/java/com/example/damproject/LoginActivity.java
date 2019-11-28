@@ -63,7 +63,7 @@ public class LoginActivity extends AppCompatActivity {
                     startActivity(intent);
                 } else {
                     Toast.makeText(getApplicationContext(),
-                            "ERROR: User not found!",
+                            "Username/password incorrect",
                             Toast.LENGTH_LONG).show();
                 }
 

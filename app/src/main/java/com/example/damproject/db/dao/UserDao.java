@@ -17,6 +17,9 @@ public interface UserDao {
     @Query("SELECT * FROM USERS WHERE username = :username")
     User getUserByUsername(String username);
 
+    @Query("SELECT MAX(id) FROM USERS")
+    long getMaxId();
+
     @Insert
     long insertUser(User user);
 

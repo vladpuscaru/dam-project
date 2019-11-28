@@ -3,21 +3,70 @@ package com.example.damproject.db.model;
 import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.ForeignKey;
 import androidx.room.Ignore;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.example.damproject.MainActivity;
 
-@Entity(tableName = "food_items")
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+
+import static androidx.room.ForeignKey.CASCADE;
+
+@Entity(tableName = "food_items",
+        foreignKeys =
+        @ForeignKey(entity = User.class,
+                parentColumns = "id",
+                childColumns = "user_id",
+                onDelete = CASCADE),
+        indices = {@Index("user_id")})
 public class FoodItem implements Parcelable {
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
     @ColumnInfo(name = "id")
     private long id;
+
+    @ColumnInfo(name = "user_id")
+    private long userId;
+
+    @ColumnInfo(name = "type")
+    private String type;
+    @ColumnInfo(name = "date")
+    private Date date;
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(long userId) {
+        this.userId = userId;
+    }
 
     @ColumnInfo(name = "name")
     private String name;
@@ -34,6 +83,8 @@ public class FoodItem implements Parcelable {
 
     @Ignore
     public FoodItem() {
+        this.type = "";
+        this.date = null;
     }
 
     @Ignore
@@ -48,6 +99,19 @@ public class FoodItem implements Parcelable {
             int iFats = in.readInt();
             int iProteins = in.readInt();
             ingredients.add(new Ingredient(iName, iCalories, iCarbohydrates, iFats, iProteins));
+        }
+        userId = in.readLong();
+        type = in.readString();
+
+        if (in.readString() != null) {
+            try {
+                this.date = new SimpleDateFormat(MainActivity.DATE_FORMAT,
+                        Locale.US).parse(in.readString());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        } else {
+            this.date = null;
         }
     }
 
@@ -75,6 +139,8 @@ public class FoodItem implements Parcelable {
     public FoodItem(String name, List<Ingredient> ingredients) {
         this.name = name;
         this.ingredients = ingredients;
+        this.type = "";
+        this.date = null;
     }
 
     public String getName() {
@@ -119,6 +185,14 @@ public class FoodItem implements Parcelable {
             dest.writeInt(i.getFats());
             dest.writeInt(i.getProteins());
         }
+        dest.writeLong(userId);
+        dest.writeString(type);
+        String date = this.date != null ?
+                new SimpleDateFormat(MainActivity.DATE_FORMAT,
+                        Locale.US).format(this.date)
+                : null;
+        dest.writeString(date);
+
     }
 
     public int getTotalCarbohydrates() {
@@ -146,14 +220,14 @@ public class FoodItem implements Parcelable {
     }
 
     public float getCarbohydratesPercentage() {
-        return (float)getTotalCarbohydrates() / getTotalCalories();
+        return (float) getTotalCarbohydrates() / getTotalCalories();
     }
 
     public float getFatsPercentage() {
-        return (float)getTotalFats() / getTotalCalories();
+        return (float) getTotalFats() / getTotalCalories();
     }
 
     public float getProteinsPercentage() {
-        return (float)getTotalProteins() / getTotalCalories();
+        return (float) getTotalProteins() / getTotalCalories();
     }
 }

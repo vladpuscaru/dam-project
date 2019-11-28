@@ -18,7 +18,7 @@ import java.util.Locale;
 
 @Entity(tableName = "users")
 public class User implements Parcelable, Serializable {
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
     @ColumnInfo(name = "id")
     public long id;
 
@@ -29,9 +29,29 @@ public class User implements Parcelable, Serializable {
     @ColumnInfo(name = "birthday")
     private Date birthday;
     @ColumnInfo(name = "weight")
-    private int weight;
+    private float weight;
     @ColumnInfo(name = "height")
-    private int height;
+    private float height;
+    @ColumnInfo(name = "weight_measure_unit")
+    private String weightMeasureUnit;
+    @ColumnInfo(name = "height_measure_unit")
+    private String heightMeasureUnit;
+
+    public String getWeightMeasureUnit() {
+        return weightMeasureUnit;
+    }
+
+    public void setWeightMeasureUnit(String weightMeasureUnit) {
+        this.weightMeasureUnit = weightMeasureUnit;
+    }
+
+    public String getHeightMeasureUnit() {
+        return heightMeasureUnit;
+    }
+
+    public void setHeightMeasureUnit(String heightMeasureUnit) {
+        this.heightMeasureUnit = heightMeasureUnit;
+    }
 
     @Ignore
     public User() {
@@ -61,7 +81,7 @@ public class User implements Parcelable, Serializable {
                 '}';
     }
 
-    public User(String username, String password, Date birthday, int weight, int height) {
+    public User(String username, String password, Date birthday, float weight, float height) {
         this.username = username;
         this.password = password;
         this.birthday = birthday;
@@ -80,8 +100,10 @@ public class User implements Parcelable, Serializable {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        weight = in.readInt();
-        height = in.readInt();
+        weight = in.readFloat();
+        height = in.readFloat();
+        weightMeasureUnit = in.readString();
+        heightMeasureUnit = in.readString();
     }
 
     @Ignore
@@ -121,19 +143,19 @@ public class User implements Parcelable, Serializable {
         this.birthday = birthday;
     }
 
-    public int getWeight() {
+    public float getWeight() {
         return weight;
     }
 
-    public void setWeight(int weight) {
+    public void setWeight(float weight) {
         this.weight = weight;
     }
 
-    public int getHeight() {
+    public float getHeight() {
         return height;
     }
 
-    public void setHeight(int height) {
+    public void setHeight(float height) {
         this.height = height;
     }
 
@@ -152,7 +174,9 @@ public class User implements Parcelable, Serializable {
                         Locale.US).format(this.birthday)
                 : null;
         dest.writeString(strBirthday);
-        dest.writeInt(weight);
-        dest.writeInt(height);
+        dest.writeFloat(weight);
+        dest.writeFloat(height);
+        dest.writeString(weightMeasureUnit);
+        dest.writeString(heightMeasureUnit);
     }
 }

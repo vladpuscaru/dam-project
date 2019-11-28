@@ -5,14 +5,27 @@ import android.os.Parcelable;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.ForeignKey;
 import androidx.room.Ignore;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "ingredients")
+import static androidx.room.ForeignKey.CASCADE;
+
+@Entity(tableName = "ingredients",
+        foreignKeys =
+        @ForeignKey(entity = FoodItem.class,
+                parentColumns = "id",
+                childColumns = "food_id",
+                onDelete = CASCADE),
+        indices = {@Index("food_id")})
 public class Ingredient implements Parcelable {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
     private long id;
+
+    @ColumnInfo(name = "food_id")
+    private long foodId;
 
     @ColumnInfo(name = "name")
     private String name;
@@ -24,6 +37,14 @@ public class Ingredient implements Parcelable {
     private int fats;
     @ColumnInfo(name = "proteins")
     private int proteins;
+
+    public long getFoodId() {
+        return foodId;
+    }
+
+    public void setFoodId(long foodId) {
+        this.foodId = foodId;
+    }
 
     @Ignore
     public Ingredient() {
@@ -45,6 +66,7 @@ public class Ingredient implements Parcelable {
         carbohydrates = in.readInt();
         fats = in.readInt();
         proteins = in.readInt();
+        foodId = in.readLong();
     }
 
     @Ignore
@@ -131,5 +153,6 @@ public class Ingredient implements Parcelable {
         dest.writeInt(carbohydrates);
         dest.writeInt(fats);
         dest.writeInt(proteins);
+        dest.writeLong(foodId);
     }
 }

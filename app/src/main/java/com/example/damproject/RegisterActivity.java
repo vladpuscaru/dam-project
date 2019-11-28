@@ -7,12 +7,16 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,10 +24,12 @@ import com.example.damproject.db.AppDatabase;
 import com.example.damproject.fragments.HomeFragment;
 import com.example.damproject.util.InputError;
 import com.example.damproject.db.model.User;
+import com.example.damproject.util.UTIL;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.ObjectInputStream;
+import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -45,9 +51,13 @@ public class RegisterActivity extends AppCompatActivity {
 
         @Override
         protected Long doInBackground(User... users) {
+            long maxId = AppDatabase.getInstance(getApplicationContext()).userDao().getMaxId();
+            users[0].setId(maxId + 1);
             return AppDatabase.getInstance(getApplicationContext()).userDao().insertUser(users[0]);
         }
-    };
+    }
+
+    ;
 
     public final static String EDITED_USER_KEY = "new.user.key";
     public final static String USERNAME_KEY = "username.key";
@@ -56,6 +66,8 @@ public class RegisterActivity extends AppCompatActivity {
     private User loggedUser;
 
     private InputError inputError;
+    private String weightFrom;
+    private String heightFrom;
 
     // UI Components
     private EditText etUsername;
@@ -68,6 +80,9 @@ public class RegisterActivity extends AppCompatActivity {
     private Button btnCancel;
     private Button btnOpenDatePicker;
     private TextView tvErrorReport;
+
+    private Spinner spnWeight;
+    private Spinner spnHeight;
 
 
     private DatePickerDialog.OnDateSetListener mDateSetListener;
@@ -97,8 +112,8 @@ public class RegisterActivity extends AppCompatActivity {
         etPassword.setText(loggedUser.getPassword());
         String birthday = new SimpleDateFormat(MainActivity.DATE_FORMAT, Locale.US).format(loggedUser.getBirthday());
         etBirthday.setText(birthday);
-        etWeight.setText(Integer.toString(loggedUser.getWeight()));
-        etHeight.setText(Integer.toString(loggedUser.getHeight()));
+        etWeight.setText(Float.toString(loggedUser.getWeight()));
+        etHeight.setText(Float.toString(loggedUser.getHeight()));
     }
 
     private void initComponents() {
@@ -112,6 +127,61 @@ public class RegisterActivity extends AppCompatActivity {
         btnRegister = findViewById(R.id.register_btn_register);
         btnCancel = findViewById(R.id.register_btn_cancel);
         btnOpenDatePicker = findViewById(R.id.register_btn_open_dp);
+        spnWeight = findViewById(R.id.register_spn_weight);
+        spnHeight = findViewById(R.id.register_spn_height);
+
+        ArrayAdapter adapterWeight = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, getResources().getTextArray(R.array.weights_array));
+        spnWeight.setAdapter(adapterWeight);
+        ArrayAdapter adapterHeight = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, getResources().getTextArray(R.array.heights_array));
+        spnHeight.setAdapter(adapterHeight);
+
+        weightFrom = spnWeight.getSelectedItem().toString();
+        heightFrom = spnHeight.getSelectedItem().toString();
+
+        spnWeight.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (etWeight.getText().toString().length() > 0) {
+                    float weight = Float.parseFloat(etWeight.getText().toString().trim());
+
+                    String from = weightFrom;
+                    String to = spnWeight.getItemAtPosition(position).toString();
+                    weightFrom = to;
+
+                    etWeight.setText(String.format(Locale.US, "%.2f", UTIL.weightConverter(weight, from, to)));
+                } else {
+                    weightFrom = spnWeight.getItemAtPosition(position).toString();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                return;
+            }
+        });
+
+        spnHeight.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (etHeight.getText().toString().length() > 0) {
+                    float height = Float.parseFloat(etHeight.getText().toString().trim());
+
+                    String from = heightFrom;
+                    String to = spnHeight.getItemAtPosition(position).toString();
+                    heightFrom = to;
+
+                    etHeight.setText(String.format(Locale.US, "%.2f", UTIL.heightConverter(height, from, to)));
+                } else {
+                    heightFrom = spnHeight.getItemAtPosition(position).toString();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                return;
+            }
+        });
+
 
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -147,7 +217,9 @@ public class RegisterActivity extends AppCompatActivity {
                 } else {
                     tvErrorReport.setText(inputError.toString());
                     for (EditText et : etInvalid) {
-                        et.setBackgroundColor(getResources().getColor(android.R.color.holo_red_light));
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                            et.setBackground(getResources().getDrawable(R.drawable.error_input_background));
+                        }
                     }
                 }
             }
@@ -190,7 +262,9 @@ public class RegisterActivity extends AppCompatActivity {
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                 etBirthday.setText(String.format(Locale.US, "%d-%d-%d", dayOfMonth, month, year));
             }
-        };
+        }
+
+        ;
 
     }
 
@@ -210,11 +284,11 @@ public class RegisterActivity extends AppCompatActivity {
         String weight = etWeight.getText().toString();
         String height = etHeight.getText().toString();
         /*
-            * Check USERNAME
-            * not-empty
-            * min 3 length max 10 length
-            * unique
-        */
+         * Check USERNAME
+         * not-empty
+         * min 3 length max 10 length
+         * unique
+         */
         if (username.length() == 0) {
             errorMessage += "USERNAME field is required\n";
             if (!etInvalid.contains(etUsername)) {
@@ -227,14 +301,14 @@ public class RegisterActivity extends AppCompatActivity {
                 etInvalid.add(etUsername);
             }
         }
-        if (!checkUsernameUnique(username)) {
-            errorMessage += "USERNAME " + username + " is already taken\n";
-        }
+//        if (!checkUsernameUnique(username)) {
+//            errorMessage += "USERNAME " + username + " is already taken\n";
+//        }
         /*
-            * Check PASSWORD
-            * not-empty
-            * min 4 length
-        */
+         * Check PASSWORD
+         * not-empty
+         * min 4 length
+         */
         if (password.length() == 0) {
             errorMessage += "PASSWORD field is required\n";
             if (!etInvalid.contains(etPassword)) {
@@ -248,9 +322,9 @@ public class RegisterActivity extends AppCompatActivity {
             }
         }
         /*
-            * Check CONFIRM PASSWORD
-            * matches PASSWORD
-        */
+         * Check CONFIRM PASSWORD
+         * matches PASSWORD
+         */
         if (!(confirmPassword.equals(password))) {
             errorMessage += "CONFIRMED PASSWORD should match PASSWORD\n";
             if (!etInvalid.contains(etConfirmPassowrd)) {
@@ -258,10 +332,10 @@ public class RegisterActivity extends AppCompatActivity {
             }
         }
         /*
-            * Check BIRTHDAY
-            * not-empty
-            * format matches app's date format (MainActivity.DATE_FORMAT)
-        */
+         * Check BIRTHDAY
+         * not-empty
+         * format matches app's date format (MainActivity.DATE_FORMAT)
+         */
         if (birthday.length() == 0) {
             errorMessage += "BIRTHDAY field is required\n";
             if (!etInvalid.contains(etBirthday)) {
@@ -278,9 +352,9 @@ public class RegisterActivity extends AppCompatActivity {
             }
         }
         /*
-            * Check WEIGHT
-            * not-empty
-        */
+         * Check WEIGHT
+         * not-empty
+         */
         if (weight.length() == 0) {
             errorMessage += "WEIGHT field is required";
             if (!etInvalid.contains(etWeight)) {
@@ -288,9 +362,9 @@ public class RegisterActivity extends AppCompatActivity {
             }
         }
         /*
-            * Check HEIGHT
-            * not-empty
-        */
+         * Check HEIGHT
+         * not-empty
+         */
         if (height.length() == 0) {
             errorMessage += "HEIGHT field is required";
             if (!etInvalid.contains(etHeight)) {
@@ -316,31 +390,9 @@ public class RegisterActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        user.setWeight(Integer.parseInt(etWeight.getText().toString()));
-        user.setHeight(Integer.parseInt(etHeight.getText().toString()));
+        user.setWeight(Float.parseFloat(etWeight.getText().toString()));
+        user.setHeight(Float.parseFloat(etHeight.getText().toString()));
 
         return user;
-    }
-
-    private boolean checkUsernameUnique(String username) {
-        boolean ok = true;
-        try {
-            File file = new File(MainActivity.USERS_FILE);
-            ObjectInputStream in = new ObjectInputStream(new FileInputStream(file));
-
-            while (in.available() != 0) {
-                User user = (User)in.readObject();
-                if (username.equals(user.getUsername())) {
-                    ok = false;
-                    break;
-                }
-            }
-
-            in.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return ok;
     }
 }

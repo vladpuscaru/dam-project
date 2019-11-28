@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:backgroundTint="@color/colorButton"
+    android:backgroundTintMode="screen"
     android:background="@drawable/faap_about_background"
     tools:context=".fragments.AboutFragment">
 
@@ -22,7 +24,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center_horizontal"
                 android:text="@string/about_title"
-                android:textColor="@color/colorFat" />
+                android:textColor="@android:color/black" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -31,16 +33,15 @@
                 android:gravity="center_horizontal"
                 android:text="@string/about_description"
 
-                android:textColor="@color/colorFat" />
+                android:textColor="@android:color/black" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/activity_vertical_margin"
-
                 android:gravity="center_horizontal"
                 android:text="@string/about_project_description"
-                android:textColor="@color/colorFat" />
+                android:textColor="@android:color/black" />
 
         </LinearLayout>
 
@@ -58,7 +59,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/about_features_label"
 
-                android:textColor="@color/colorFat" />
+                android:textColor="@android:color/black" />
 
             <ListView
                 android:id="@+id/about_lv_features"
@@ -80,22 +81,31 @@
                 android:layout_height="wrap_content"
                 android:text="@string/about_student_name"
 
-                android:textColor="@color/colorFat" />
+                android:textColor="@android:color/black" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
                 android:text="@string/about_teachers_names"
-                android:textColor="@color/colorFat" />
+                android:textColor="@android:color/black" />
 
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/about_quote"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/about_third_section"
+            android:textColor="@color/colorButton"
+            android:textAlignment="center"
+            android:textSize="@dimen/home_subsection_title_size"
+            android:text="@string/about_quote" />
 
         <RatingBar
             android:id="@+id/about_rb"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/about_third_section"
+            android:layout_below="@+id/about_quote"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/activity_vertical_margin"
             android:numStars="5" />

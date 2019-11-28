@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -26,15 +27,11 @@ import com.example.damproject.RegisterActivity;
 import com.example.damproject.adapters.FoodListAdapter;
 import com.example.damproject.db.AppDatabase;
 import com.example.damproject.db.model.FoodItem;
-import com.example.damproject.db.model.Ingredient;
-import com.example.damproject.db.model.Menu;
-import com.example.damproject.util.MenuType;
 import com.example.damproject.util.UTIL;
 import com.example.damproject.db.model.User;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -44,23 +41,19 @@ import static android.app.Activity.RESULT_OK;
 
 public class HomeFragment extends Fragment {
 
-    private class InsertMenu extends AsyncTask<Menu, Void, Long> {
-
-        @Override
-        protected Long doInBackground(Menu... menus) {
-            return AppDatabase.getInstance(getContext()).menuDao().insertMenu(menus[0]);
-        }
-    }
-
     public final static String EDIT_USER_KEY = "edit.user.key";
+    public final static String LOGGED_USER_KEY = "logged.user.key";
+    public final static String FOOD_TYPE_KEY = "food.type.key";
     public final static int EDIT_USER_REQUEST = 90;
     public final static int ADD_FOOD_REQUEST = 80;
 
     private User loggedUser;
-    private ArrayList<FoodItem> foodBreakfast = new ArrayList<>();
-    private ArrayList<FoodItem> foodLunch = new ArrayList<>();
-    private ArrayList<FoodItem> foodDinner = new ArrayList<>();
-    private ArrayList<FoodItem> foodSnacks = new ArrayList<>();
+    private ArrayList<FoodItem> foodBreakfast;
+    private ArrayList<FoodItem> foodLunch;
+    private ArrayList<FoodItem> foodDinner;
+    private ArrayList<FoodItem> foodSnacks;
+
+    private ArrayList<Integer> selectedIndices = new ArrayList<>();
 
     //    UI Components
     private ImageView ivUserImg;
@@ -71,11 +64,13 @@ public class HomeFragment extends Fragment {
     private Button btnUserEdit;
 
     private Button btnAddFood;
+    private Button btnDeleteFood;
     private Button btnListBreakfast;
     private Button btnListLunch;
     private Button btnListDinner;
     private Button btnListSnacks;
     private ListView lvFood;
+
 
     public HomeFragment() {
         // Required empty public constructor
@@ -99,6 +94,7 @@ public class HomeFragment extends Fragment {
 //        foodBreakfast.add(new FoodItem("Cheesewich", testIngredients1));
         // TODO: remove this test list init
 
+
         initComponents(view);
 
         return view;
@@ -106,7 +102,10 @@ public class HomeFragment extends Fragment {
 
     private void initComponents(final View view) {
         loggedUser = getArguments().getParcelable(LoginActivity.USER_KEY);
-
+        foodBreakfast = getArguments().getParcelableArrayList(MainActivity.BREAKFAST_LIST_KEY);
+        foodLunch = getArguments().getParcelableArrayList(MainActivity.LUNCH_LIST_KEY);
+        foodDinner = getArguments().getParcelableArrayList(MainActivity.DINNER_LIST_KEY);
+        foodSnacks = getArguments().getParcelableArrayList(MainActivity.SNACKS_LIST_KEY);
 
         ivUserImg = view.findViewById(R.id.home_img_user);
         tvUserName = view.findViewById(R.id.home_tv_user_name);
@@ -116,6 +115,7 @@ public class HomeFragment extends Fragment {
         btnUserEdit = view.findViewById(R.id.home_btn_user_edit);
         lvFood = view.findViewById(R.id.home_lv_subsection_food);
         btnAddFood = view.findViewById(R.id.home_btn_subsection_food_add_button);
+        btnDeleteFood = view.findViewById(R.id.home_btn_subsection_food_delete_button);
         btnListBreakfast = view.findViewById(R.id.home_btn_subsection_food_breakfast);
         btnListLunch = view.findViewById(R.id.home_btn_subsection_food_lunch);
         btnListDinner = view.findViewById(R.id.home_btn_subsection_food_dinner);
@@ -123,6 +123,7 @@ public class HomeFragment extends Fragment {
 
         deActivateButtons();
         setActiveButton(view, btnListBreakfast.getId());
+        setAddBtnText();
 
         editUserView();
 
@@ -168,6 +169,10 @@ public class HomeFragment extends Fragment {
                     public void onClick(DialogInterface dialog, int which) {
                         if (options[which].equals("Create a new food item")) {
                             Intent intent = new Intent(view.getContext(), AddFoodActivity.class);
+                            Bundle bundle = new Bundle();
+                            bundle.putParcelable(LOGGED_USER_KEY, loggedUser);
+                            bundle.putString(FOOD_TYPE_KEY, getCurrentFoodType());
+                            intent.putExtras(bundle);
                             startActivityForResult(intent, ADD_FOOD_REQUEST);
                         } else if (options[which].equals("Choose from Database")) {
 
@@ -189,6 +194,92 @@ public class HomeFragment extends Fragment {
                 startActivityForResult(intent, EDIT_USER_REQUEST);
             }
         });
+
+        lvFood.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                View selected = parent.getChildAt(position);
+
+                boolean isSelected = false;
+                for (Integer i : selectedIndices) {
+                    if (i == position) {
+                        isSelected = true;
+                        selectedIndices.remove(i);
+                        break;
+                    }
+                }
+
+                if (!isSelected) {
+                    selectedIndices.add(position);
+                }
+
+                setSelectedItemState(selected, !isSelected);
+            }
+        });
+
+        btnDeleteFood.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final List<FoodItem> toRemove = new ArrayList<>();
+                FoodListAdapter adapter = (FoodListAdapter) lvFood.getAdapter();
+                for (int i = 0; i < selectedIndices.size(); i++) {
+                    toRemove.add(adapter.getItem(i));
+                    switch (getActiveButton()) {
+                        case 1:
+                            foodBreakfast.remove(adapter.getItem(i));
+                            break;
+                        case 2:
+                            foodLunch.remove(adapter.getItem(i));
+                            break;
+                        case 3:
+                            foodDinner.remove(adapter.getItem(i));
+                            break;
+                        case 4:
+                            foodSnacks.remove(adapter.getItem(i));
+                            break;
+                    }
+                }
+                selectedIndices.clear();
+                adapter.notifyDataSetChanged();
+                UTIL.setListViewHeightBasedOnChildren(lvFood);
+
+                // remove from db
+                new AsyncTask<Void, Void, Integer>() {
+
+                    @Override
+                    protected Integer doInBackground(Void... voids) {
+                        int count = 0;
+                        for (FoodItem f : toRemove) {
+                            count++;
+                            AppDatabase.getInstance(getContext()).foodItemDao().deleteFoodItem(f);
+                        }
+                        return count;
+                    }
+                }.execute();
+            }
+        });
+    }
+
+    private void setSelectedItemState(View selected, boolean b) {
+        if (b) {
+            selected.setBackgroundColor(getResources().getColor(android.R.color.holo_red_light));
+        } else {
+            selected.setBackgroundColor(getResources().getColor(android.R.color.white));
+        }
+    }
+
+    private String getCurrentFoodType() {
+        switch (getActiveButton()) {
+            case 1:
+                return "breakfast";
+            case 2:
+                return "lunch";
+            case 3:
+                return "dinner";
+            case 4:
+                return "snacks";
+        }
+        return "unknown";
     }
 
     @Override
@@ -199,21 +290,6 @@ public class HomeFragment extends Fragment {
             if (requestCode == ADD_FOOD_REQUEST) {
                 Bundle bundle = data.getExtras();
                 FoodItem foodItem = bundle.getParcelable(AddFoodActivity.NEW_FOOD_KEY);
-
-                SimpleDateFormat format = new SimpleDateFormat(MainActivity.DATE_FORMAT, Locale.US);
-                Date now = null;
-                try {
-                    now = format.parse(format.format(new Date()));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-                Menu menu = new Menu(loggedUser.getId(),
-                        foodItem.getId(),
-                        MenuType.valueOf(getActiveButtonView().getText().toString()),
-                        now);
-                // ad menu for user
-                new InsertMenu().execute(menu);
 
                 addFoodOnActiveList(foodItem);
 
@@ -230,8 +306,8 @@ public class HomeFragment extends Fragment {
 
     private void editUserView() {
         String userAge = String.format(Locale.US, "%d years old", loggedUser.getAge());
-        String userWeight = String.format(Locale.US, "%d kg", loggedUser.getWeight());
-        String userHeight = String.format(Locale.US, "%d cm", loggedUser.getHeight());
+        String userWeight = String.format(Locale.US, "%.2f kg", loggedUser.getWeight());
+        String userHeight = String.format(Locale.US, "%.2f cm", loggedUser.getHeight());
 
         tvUserName.setText(loggedUser.getUsername());
         tvUserAge.setText(userAge);
@@ -280,6 +356,7 @@ public class HomeFragment extends Fragment {
     private void onButtonListClickHandler(View v) {
         deActivateButtons();
         setActiveButton(v, v.getId());
+        setAddBtnText();
 
         lvFood.setAdapter(getActiveList());
         UTIL.setListViewHeightBasedOnChildren(lvFood);
@@ -326,6 +403,11 @@ public class HomeFragment extends Fragment {
         btnListDinner.setBackgroundColor(getResources().getColor(R.color.colorButton));
         btnListSnacks.setEnabled(true);
         btnListSnacks.setBackgroundColor(getResources().getColor(R.color.colorButton));
+    }
+
+    private void setAddBtnText() {
+        String txt = getActiveButtonView().getText().toString();
+        btnAddFood.setText(String.format(Locale.US, "%s %s", getString(R.string.home_subsection_food_button), txt));
     }
 
 }
