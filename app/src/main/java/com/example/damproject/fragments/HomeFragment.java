@@ -357,6 +357,7 @@ public class HomeFragment extends Fragment {
         deActivateButtons();
         setActiveButton(v, v.getId());
         setAddBtnText();
+        selectedIndices.clear();
 
         lvFood.setAdapter(getActiveList());
         UTIL.setListViewHeightBasedOnChildren(lvFood);

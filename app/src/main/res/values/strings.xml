@@ -87,7 +87,7 @@
     <string name="about_quote">\"It\'s not much..but it\'s honest work\"</string>
     <string name="add_food_add_ingredient_description">Fill the form below to add a new ingredient</string>
     <string name="journal_title">Personal journal</string>
-    <string name="journal_description">Here you can generate reports about your food consumptions. Empty inputs generate a list of all the food you\'ve registered in the app</string>
+    <string name="journal_description">Here you can generate reports about your food consumptions. ATTENTION: Not fully implemented!</string>
     <string name="journal_input_food_regex_label">Food name:</string>
     <string name="journal_input_food_regex_hint">eg: chicken</string>
     <string name="journal_input_ingredients_regex_label">Ingredients:</string>
