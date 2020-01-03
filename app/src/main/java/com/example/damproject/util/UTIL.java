@@ -6,6 +6,8 @@ import android.view.ViewGroup;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
+import com.google.android.gms.maps.model.LatLng;
+
 public abstract class UTIL {
     private static double KG_TO_LBS = 2.20462262;
     private static double LBS_TO_KG = 0.45359237;
@@ -16,6 +18,8 @@ public abstract class UTIL {
     private static double INCHES_TO_FEET = 0.0833333333;
     private static double FEET_TO_CM = 30.48;
     private static double FEET_TO_INCHES = 12;
+
+    private static double EARTH_RADIUS = 6371;
 
     public static void setListViewHeightBasedOnChildren(ListView listView) {
         ListAdapter adapter = listView.getAdapter();
@@ -80,5 +84,26 @@ public abstract class UTIL {
 
 
         return -1;
+    }
+
+    public static double getDistanceBetweenTwoCoordonates(LatLng l1, LatLng l2) {
+        double lat1 = l1.latitude,
+                lng1 = l1.longitude,
+                lat2 = l2.latitude,
+                lng2 = l2.longitude;
+
+        double dLat = Math.toRadians(lat2 - lat1);
+        double dLng = Math.toRadians(lng2 - lng1);
+
+        double sindLat = Math.sin(dLat / 2);
+        double sindLng = Math.sin(dLng / 2);
+
+        double a = Math.pow(sindLat, 2) + Math.pow(sindLng, 2) * Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2));
+
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+        double dist = EARTH_RADIUS * c;
+
+        return dist;
     }
 }

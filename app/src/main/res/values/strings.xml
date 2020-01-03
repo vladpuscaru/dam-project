@@ -121,4 +121,33 @@
     <string name="csv_save_done">Report saved in</string>
     <string name="title_activity_maps">Map</string>
     <string name="about_btn_maps_label">Check out the nearest FAAP center</string>
+
+    <string name="maps_location_error">Location access was denied!</string>
+
+    <string name="maps_my_home_title">Cave of Geeks</string>
+    <string name="maps_my_home_lat">44.448038</string>
+    <string name="maps_my_home_lng">26.123054</string>
+    <string name="maps_my_home_snippet">Programmers birthplace</string>
+
+    <string name="maps_faap_center_1_title">FAAP Stefan cel Mare</string>
+    <string name="maps_faap_center_1_lat">44.450818</string>
+    <string name="maps_faap_center_1_lng">26.122324</string>
+    <string name="maps_faap_center_1_snippet">FAAP Center</string>
+
+    <string name="maps_faap_center_2_title">FAAP ASE/CSIE</string>
+    <string name="maps_faap_center_2_lat">44.448034</string>
+    <string name="maps_faap_center_2_lng">26.099158</string>
+    <string name="maps_faap_center_2_snippet">FAAP Center</string>
+
+    <string name="maps_faap_center_3_title">FAAP Unirea - Main Center</string>
+    <string name="maps_faap_center_3_lat">44.427710</string>
+    <string name="maps_faap_center_3_lng">26.102531</string>
+    <string name="maps_faap_center_3_snippet">FAAP Center</string>
+
+    <string name="maps_faap_center_4_title">FAAP Politehnica</string>
+    <string name="maps_faap_center_4_lat">44.435041</string>
+    <string name="maps_faap_center_4_lng">26.054957</string>
+    <string name="maps_faap_center_4_snippet">FAAP Center</string>
+    <string name="maps_btn_label">Find the nearest FAAP center</string>
+
 </resources>
