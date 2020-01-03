@@ -13,11 +13,15 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.damproject.MainActivity;
 import com.example.damproject.R;
 import com.example.damproject.db.model.FoodItem;
+import com.example.damproject.db.model.Ingredient;
 
 
+import org.w3c.dom.Text;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -34,6 +38,10 @@ public class FoodListAdapter extends ArrayAdapter<FoodItem> {
         private TextView tvFoodCarbohydrates;
         private TextView tvFoodFats;
         private TextView tvFoodProteins;
+
+        private TextView tvRegisteredOn;
+        private TextView tvServedAt;
+        private TextView tvIngredients;
     }
 
 
@@ -58,6 +66,9 @@ public class FoodListAdapter extends ArrayAdapter<FoodItem> {
             viewHolder.tvFoodCarbohydrates = convertView.findViewById(R.id.adapter_food_tv_carbohydrates);
             viewHolder.tvFoodFats = convertView.findViewById(R.id.adapter_food_tv_fats);
             viewHolder.tvFoodProteins = convertView.findViewById(R.id.adapter_food_tv_proteins);
+            viewHolder.tvRegisteredOn = convertView.findViewById(R.id.adapter_food_tv_registeredOn);
+            viewHolder.tvServedAt = convertView.findViewById(R.id.adapter_food_tv_servedAt);
+            viewHolder.tvIngredients = convertView.findViewById(R.id.adapter_food_tv_ingredients);
 
 
             convertView.setTag(viewHolder);
@@ -67,6 +78,17 @@ public class FoodListAdapter extends ArrayAdapter<FoodItem> {
 
         viewHolder.tvFoodTitle.setText(current.getName());
         viewHolder.tvFoodCalories.setText(String.format(Locale.US, "%d calories", current.getTotalCalories()));
+
+        String strDate = new SimpleDateFormat(MainActivity.DATE_FORMAT, Locale.US).format(current.getDate());
+        viewHolder.tvRegisteredOn.setText(strDate);
+
+        viewHolder.tvServedAt.setText(current.getType());
+
+        StringBuilder strIngredients = new StringBuilder();
+        for (Ingredient i : current.getIngredients()) {
+            strIngredients.append(i.getName());
+        }
+        viewHolder.tvIngredients.setText(strIngredients.toString());
 
         viewHolder.tvFoodCarbohydrates.setText(String.format(Locale.US, "%d carbs", current.getTotalCarbohydrates()));
         LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) viewHolder.tvFoodCarbohydrates.getLayoutParams();

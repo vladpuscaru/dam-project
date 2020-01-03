@@ -9,6 +9,7 @@
         android:id="@+id/adapter_food_img"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
         android:src="@drawable/ic_faap_add" />
 
     <RelativeLayout
@@ -23,13 +24,108 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:text="@string/test_text" />
+            android:text="@string/test_text"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/register_section_title_text_size" />
+
+        <!-- Food metadata -->
+        <LinearLayout
+            android:id="@+id/adapter_food_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/adapter_food_tv_title"
+            android:layout_marginTop="@dimen/adapter_ingredient_padding_vertical"
+            android:layout_marginBottom="@dimen/adapter_ingredient_padding_vertical"
+            android:orientation="vertical">
+
+            <!-- Registered on -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".25"
+                    android:text="@string/adapter_food_registered_label"
+                    android:textColor="@android:color/holo_green_dark"
+                    android:textSize="@dimen/login_footer_text_size" />
+
+                <TextView
+                    android:id="@+id/adapter_food_tv_registeredOn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".75"
+                    android:gravity="right"
+                    android:text="@string/test_text"
+                    android:textColor="@android:color/holo_green_dark"
+                    android:textSize="@dimen/login_footer_text_size"
+                    android:textStyle="italic" />
+
+            </LinearLayout>
+
+            <!-- Served at -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".25"
+                    android:text="@string/adapter_food_served_label"
+                    android:textColor="@android:color/holo_green_dark"
+                    android:textSize="@dimen/login_footer_text_size" />
+
+                <TextView
+                    android:id="@+id/adapter_food_tv_servedAt"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".75"
+                    android:gravity="right"
+                    android:text="@string/test_text"
+                    android:textColor="@android:color/holo_green_dark"
+                    android:textSize="@dimen/login_footer_text_size"
+                    android:textStyle="italic" />
+
+            </LinearLayout>
+
+            <!-- Ingredients -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".25"
+                    android:text="@string/adapter_food_ingredients_label"
+                    android:textColor="@android:color/holo_green_dark"
+                    android:textSize="@dimen/login_footer_text_size" />
+
+                <TextView
+                    android:id="@+id/adapter_food_tv_ingredients"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".75"
+                    android:gravity="right"
+                    android:text="@string/test_text"
+                    android:textColor="@android:color/holo_green_dark"
+                    android:textSize="@dimen/login_footer_text_size"
+                    android:textStyle="italic" />
+
+            </LinearLayout>
+
+        </LinearLayout>
 
         <TextView
             android:id="@+id/adapter_food_tv_calories"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/adapter_food_tv_title"
+            android:layout_below="@+id/adapter_food_info"
             android:text="@string/test_text"
             android:textAlignment="center" />
 

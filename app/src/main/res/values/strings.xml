@@ -65,6 +65,10 @@
     <string name="add_food_input_picture_label">Picture</string>
     <string name="add_food_input_picture_btn_label">+</string>
 
+    <string name="error_date_format">Date format should be dd-MM-yyyy</string>
+    <string name="dialog_positive_button_label">Ok</string>
+    <string name="dialog_negative_button_label">Cancel</string>
+
     <string-array name="weights_array">
         <item>kg</item>
         <item>lbs</item>
@@ -87,7 +91,7 @@
     <string name="about_quote">\"It\'s not much..but it\'s honest work\"</string>
     <string name="add_food_add_ingredient_description">Fill the form below to add a new ingredient</string>
     <string name="journal_title">Personal journal</string>
-    <string name="journal_description">Here you can generate reports about your food consumptions. ATTENTION: Not fully implemented!</string>
+    <string name="journal_description">Here you can generate reports about your food consumptions.</string>
     <string name="journal_input_food_regex_label">Food name:</string>
     <string name="journal_input_food_regex_hint">eg: chicken</string>
     <string name="journal_input_ingredients_regex_label">Ingredients:</string>
@@ -95,6 +99,26 @@
     <string name="journal_input_date_regex_label">Registered:</string>
     <string name="journal_input_date_regex_hint">eg: 20-20-2019</string>
     <string name="journal_btn_submit_label">SEARCH</string>
+    <string name="journal_btn_submit_label_no_fields">SHOW ALL</string>
     <string name="journal_instructions">Click on the field you want to base the query on, fill the input and press the search button. Altirnatively, you can leave all fields unchecked and retreive all the items</string>
+    <string name="journal_tv_resultEmpty">There is no item that matches your query</string>
+    <string name="journal_fab_content_description">Save report to file</string>
+    <string name="journal_dialog_title">File Name</string>
+    <string name="journal_default_file_name">food_report</string>
     <string name="home_subsection_food_delete_button">DELETE Selected Items</string>
+    <string name="adapter_food_registered_label">Registered on:</string>
+    <string name="adapter_food_served_label">Served at:</string>
+    <string name="adapter_food_ingredients_label">Ingredients:</string>
+
+    <string name="csv_column_1_label">Nr. crt.</string>
+    <string name="csv_column_2_label">Registered On</string>
+    <string name="csv_column_3_label">Name</string>
+    <string name="csv_column_4_label">Total Calories</string>
+    <string name="csv_column_5_label">Carbohydrates</string>
+    <string name="csv_column_6_label">Fats</string>
+    <string name="csv_column_7_label">Proteins</string>
+    <string name="csv_column_8_label">Served At</string>
+    <string name="csv_save_done">Report saved in</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="about_btn_maps_label">Check out the nearest FAAP center</string>
 </resources>

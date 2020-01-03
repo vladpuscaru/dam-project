@@ -74,6 +74,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/about_second_section"
             android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
             android:orientation="vertical">
 
             <TextView
@@ -91,11 +92,20 @@
 
         </LinearLayout>
 
+        <Button
+            android:id="@+id/about_btn_maps"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:drawable/alert_dark_frame"
+            android:textColor="@android:color/white"
+            android:layout_below="@id/about_third_section"
+            android:text="@string/about_btn_maps_label" />
+
         <TextView
             android:id="@+id/about_quote"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/about_third_section"
+            android:layout_below="@+id/about_btn_maps"
             android:textColor="@color/colorButton"
             android:textAlignment="center"
             android:textSize="@dimen/home_subsection_title_size"

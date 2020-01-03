@@ -29,7 +29,8 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:hint="@string/login_et_username_hint"
-        android:inputType="text" />
+        android:inputType="text"
+        android:textColor="@android:color/white" />
 
     <EditText
         android:id="@+id/login_et_password"
@@ -37,7 +38,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/login_et_username"
         android:hint="@string/login_et_password_hint"
-        android:inputType="textPassword" />
+        android:inputType="textPassword"
+        android:textColor="@android:color/white" />
 
     <Button
         android:id="@+id/login_btn_forgot_password"
@@ -83,10 +85,10 @@
         android:id="@+id/login_pb"
         style="?android:attr/progressBarStyle"
         android:layout_width="wrap_content"
-        android:visibility="gone"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true" />
+        android:layout_centerVertical="true"
+        android:visibility="gone" />
 
 
 </RelativeLayout>

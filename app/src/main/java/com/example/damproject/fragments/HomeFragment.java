@@ -71,7 +71,6 @@ public class HomeFragment extends Fragment {
     private Button btnListSnacks;
     private ListView lvFood;
 
-
     public HomeFragment() {
         // Required empty public constructor
     }

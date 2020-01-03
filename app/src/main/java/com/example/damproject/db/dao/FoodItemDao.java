@@ -29,6 +29,9 @@ public interface FoodItemDao {
     @Query("SELECT * FROM food_items WHERE type = :type")
     List<FoodItem> getFoodItemsByType(String type);
 
+    @Query("SELECT f.id, f.name, f.ingredients, f.type, f.user_id, f.date FROM food_items f, ingredients i WHERE f.id = i.food_id AND i.name LIKE :ingredientName")
+    List<FoodItem> getFoodItemsByIngredientName(String ingredientName);
+
     @Query("SELECT MAX(id) FROM food_items")
     long getMaxId();
 

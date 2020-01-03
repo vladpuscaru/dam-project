@@ -2,6 +2,7 @@ package com.example.damproject.fragments;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -11,10 +12,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RatingBar;
 
 import com.example.damproject.LoginActivity;
+import com.example.damproject.MapsActivity;
 import com.example.damproject.R;
 
 public class AboutFragment extends Fragment {
@@ -23,9 +26,11 @@ public class AboutFragment extends Fragment {
 
     private String username;
 
+    // UI Components
     private RatingBar ratingBar;
     private ListView lvFeatures;
     private SharedPreferences preferences;
+    private Button btnMaps;
 
     public AboutFragment() {
         // Required empty public constructor
@@ -49,6 +54,15 @@ public class AboutFragment extends Fragment {
 
         ratingBar = view.findViewById(R.id.about_rb);
         lvFeatures = view.findViewById(R.id.about_lv_features);
+        btnMaps = view.findViewById(R.id.about_btn_maps);
+
+        btnMaps.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), MapsActivity.class);
+                startActivity(intent);
+            }
+        });
 
         ArrayAdapter adapter = ArrayAdapter.createFromResource(view.getContext(), R.array.features_array , android.R.layout.simple_list_item_1);
         lvFeatures.setAdapter(adapter);
