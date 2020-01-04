@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "864624430792",
+    "firebase_url": "https://faap-dam-project.firebaseio.com",
+    "project_id": "faap-dam-project",
+    "storage_bucket": "faap-dam-project.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:864624430792:android:96e99381939faf3cf89ffd",
+        "android_client_info": {
+          "package_name": "com.example.damproject"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "864624430792-c1h3ftahmla4eol525k2625o4ok1dkjr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.damproject",
+            "certificate_hash": "c72c1fc40667178f9e9b986259c39e6568565473"
+          }
+        },
+        {
+          "client_id": "864624430792-vjjgktb1ec79fn58nob3mvb5sadse79i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA7d1UugxrQAdyRsDZH8HSkfnch58n89x0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "864624430792-vjjgktb1ec79fn58nob3mvb5sadse79i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

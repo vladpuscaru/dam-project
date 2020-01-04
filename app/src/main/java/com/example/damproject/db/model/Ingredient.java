@@ -38,12 +38,29 @@ public class Ingredient implements Parcelable {
     @ColumnInfo(name = "proteins")
     private int proteins;
 
+    @Ignore
+    private String fbId;
+
+    @Ignore
+    public Ingredient(String id, Ingredient that) {
+        this.fbId = id;
+        this.name = that.name;
+        this.calories = that.calories;
+        this.carbohydrates = that.carbohydrates;
+        this.fats = that.fats;
+        this.proteins = that.proteins;
+    }
+
     public long getFoodId() {
         return foodId;
     }
 
     public void setFoodId(long foodId) {
         this.foodId = foodId;
+    }
+
+    public String getFbId() {
+        return fbId;
     }
 
     @Ignore
@@ -97,6 +114,7 @@ public class Ingredient implements Parcelable {
                 ", calories=" + calories +
                 ", carbohydrates=" + carbohydrates +
                 ", fats=" + fats +
+                ", fbId=" + fbId +
                 '}';
     }
 
@@ -138,6 +156,10 @@ public class Ingredient implements Parcelable {
         this.carbohydrates = carbohydrates;
         this.fats = fats;
         this.proteins = proteins;
+    }
+
+    public void setFbId(String fbId) {
+        this.fbId = fbId;
     }
 
     @Override

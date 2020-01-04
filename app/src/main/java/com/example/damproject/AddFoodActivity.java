@@ -1,5 +1,6 @@
 package com.example.damproject;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,16 +23,25 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.damproject.adapters.IngredientListAdapter;
+import com.example.damproject.adapters.IngredientListTextAdapter;
 import com.example.damproject.db.AppDatabase;
 import com.example.damproject.db.model.User;
 import com.example.damproject.fragments.HomeFragment;
 import com.example.damproject.db.model.FoodItem;
 import com.example.damproject.db.model.Ingredient;
+import com.example.damproject.fragments.IngredientManagerFragment;
 import com.example.damproject.util.UTIL;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -66,9 +76,14 @@ public class AddFoodActivity extends AppCompatActivity {
     public final static int REQUEST_PICTURE_CAPTURE = 0;
     public final static int REQUEST_PICTURE_CHOOSE = 1;
 
+    private ArrayList<String> spnIngredientsNamesList = new ArrayList<>();
+    private ArrayList<Ingredient> spnIngredientsList = new ArrayList<>();
+
     private ArrayList<Ingredient> ingredients = new ArrayList<>();
     private String errorMessage;
     private User loggedUser;
+
+    private DatabaseReference db;
 
     private String foodType;
 
@@ -77,8 +92,8 @@ public class AddFoodActivity extends AppCompatActivity {
     private Button btnAddIngredient;
     private Button btnSubmit;
     private Button btnCancel;
-    private Button btnPicture;
-    private ImageView imgFood;
+//    private Button btnPicture;
+//    private ImageView imgFood;
     private EditText etIngredientName;
     private EditText etIngredientCalories;
     private EditText etIngredientCarbohydrates;
@@ -89,6 +104,12 @@ public class AddFoodActivity extends AppCompatActivity {
     private TextView tvInputError;
     private TextView tvIngredientInputError;
     private List<View> invalidInputs = new ArrayList<>();
+
+    private Switch swIngredients;
+    private Spinner spnIngredients;
+    private View viewIngredientsCreate;
+    private View viewIngredientsChoose;
+    private TextView tvIngredientsInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,12 +130,14 @@ public class AddFoodActivity extends AppCompatActivity {
     }
 
     private void initComponents() {
+        db = FirebaseDatabase.getInstance().getReference(IngredientManagerFragment.INGREDIENTS_TABLE_NAME);
+
         etFoodName = findViewById(R.id.add_food_et_name);
         btnAddIngredient = findViewById(R.id.add_food_btn_add_ingredient);
         btnSubmit = findViewById(R.id.add_food_btn_submit);
         btnCancel = findViewById(R.id.add_food_btn_cancel);
-        btnPicture = findViewById(R.id.add_food_input_picture_btn);
-        imgFood = findViewById(R.id.add_food_input_picture_img);
+//        btnPicture = findViewById(R.id.add_food_input_picture_btn);
+//        imgFood = findViewById(R.id.add_food_input_picture_img);
         etIngredientName = findViewById(R.id.add_food_ingredient_et_name);
         etIngredientCalories = findViewById(R.id.add_food_ingredient_et_calories);
         etIngredientCarbohydrates = findViewById(R.id.add_food_ingredient_et_carbohydrates);
@@ -123,6 +146,33 @@ public class AddFoodActivity extends AppCompatActivity {
         lvIngredients = findViewById(R.id.add_food_lv_ingredients);
         tvInputError = findViewById(R.id.add_food_input_error);
         tvIngredientInputError = findViewById(R.id.add_food_input_ingredients_error);
+        swIngredients = findViewById(R.id.add_food_input_ingredients_switch);
+        spnIngredients = findViewById(R.id.add_food_input_ingredients_spn);
+        viewIngredientsChoose = findViewById(R.id.add_food_input_ingredients_choose);
+        viewIngredientsCreate = findViewById(R.id.add_food_input_ingredients_create);
+        tvIngredientsInfo = findViewById(R.id.add_food_input_ingredients_tv_info);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item ,spnIngredientsNamesList);
+        spnIngredients.setAdapter(adapter);
+
+        swIngredients.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (swIngredients.isChecked()) {
+                    // Create ingredient
+                    viewIngredientsChoose.setVisibility(View.GONE);
+                    viewIngredientsCreate.setVisibility(View.VISIBLE);
+                    tvIngredientsInfo.setText(getString(R.string.add_food_add_ingredient_description));
+                    swIngredients.setText(getString(R.string.add_food_input_ingredients_switch_on_label));
+                } else {
+                    // Choose ingredient
+                    viewIngredientsCreate.setVisibility(View.GONE);
+                    viewIngredientsChoose.setVisibility(View.VISIBLE);
+                    tvIngredientsInfo.setText(getString(R.string.add_food_add_ingredient_description_choose));
+                    swIngredients.setText(getString(R.string.add_food_input_ingredients_switch_off_label));
+                }
+            }
+        });
 
         hideErrors();
 
@@ -133,19 +183,27 @@ public class AddFoodActivity extends AppCompatActivity {
         btnAddIngredient.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (validateIngredient()) {
-                    Ingredient i = createIngredientFromView();
-                    ingredients.add(i);
-
-
-
-                    clearIngredientForm();
-                    Log.d("ADDINGREDIENT", "I am here!");
+                if (!swIngredients.isChecked()) {
+                    // Ingredient was chosen
+                    Ingredient ingredientToAdd = spnIngredientsList.get(spnIngredients.getSelectedItemPosition());
+                    ingredients.add(ingredientToAdd);
                     IngredientListAdapter adapter = (IngredientListAdapter) lvIngredients.getAdapter();
                     adapter.notifyDataSetChanged();
                     UTIL.setListViewHeightBasedOnChildren(lvIngredients);
                 } else {
-                    showIngredientErrors();
+                    // Ingredient was created
+                    if (validateIngredient()) {
+                        Ingredient i = createIngredientFromView();
+                        ingredients.add(i);
+
+
+                        clearIngredientForm();
+                        IngredientListAdapter adapter = (IngredientListAdapter) lvIngredients.getAdapter();
+                        adapter.notifyDataSetChanged();
+                        UTIL.setListViewHeightBasedOnChildren(lvIngredients);
+                    } else {
+                        showIngredientErrors();
+                    }
                 }
             }
         });
@@ -182,63 +240,85 @@ public class AddFoodActivity extends AppCompatActivity {
             }
         });
 
-        btnPicture.setOnClickListener(new View.OnClickListener() {
+//        btnPicture.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                final CharSequence[] options = {"Take Photo", "Choose from Gallery", "Cancel"};
+//
+//                AlertDialog.Builder builder = new AlertDialog.Builder(AddFoodActivity.this);
+//                builder.setTitle("Choose a picture for your food");
+//
+//                builder.setItems(options, new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//
+//                        if (options[which].equals("Take Photo")) {
+//                            Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+//                            startActivityForResult(intent, REQUEST_PICTURE_CAPTURE);
+//                        } else if (options[which].equals("Choose from Gallery")) {
+//                            Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//                            startActivityForResult(intent, REQUEST_PICTURE_CHOOSE);
+//                        } else if (options[which].equals("Cancel")) {
+//                            dialog.dismiss();
+//                        }
+//
+//                    }
+//                });
+//
+//                builder.show();
+//            }
+//        });
+
+        db.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onClick(View v) {
-                final CharSequence[] options = { "Take Photo", "Choose from Gallery", "Cancel" };
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                spnIngredientsList.clear();
+                spnIngredientsNamesList.clear();
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(AddFoodActivity.this);
-                builder.setTitle("Choose a picture for your food");
+                for (DataSnapshot i : dataSnapshot.getChildren()) {
+                    Ingredient ingredient = i.getValue(Ingredient.class);
+                    spnIngredientsList.add(ingredient);
+                    spnIngredientsNamesList.add(ingredient.getName());
+                }
 
-                builder.setItems(options, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                ArrayAdapter adapter = (ArrayAdapter) spnIngredients.getAdapter();
+                adapter.notifyDataSetChanged();
+            }
 
-                        if (options[which].equals("Take Photo")) {
-                            Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                            startActivityForResult(intent, REQUEST_PICTURE_CAPTURE);
-                        } else if (options[which].equals("Choose from Gallery")) {
-                            Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                            startActivityForResult(intent, REQUEST_PICTURE_CHOOSE);
-                        } else if (options[which].equals("Cancel")) {
-                            dialog.dismiss();
-                        }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                    }
-                });
-
-                builder.show();
             }
         });
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (resultCode == RESULT_OK && data != null) {
-            switch (requestCode) {
-                case REQUEST_PICTURE_CAPTURE:
-                    Bitmap selectedImage = (Bitmap) data.getExtras().get("data");
-                    imgFood.setImageBitmap(selectedImage);
-                    break;
-                case REQUEST_PICTURE_CHOOSE:
-                    Uri uriSelectedImage = data.getData();
-                    String[] filePathColumn = { MediaStore.Images.Media.DATA };
-                    if (uriSelectedImage != null) {
-                        Cursor cursor = getContentResolver().query(uriSelectedImage, filePathColumn, null, null, null);
-                        if (cursor != null) {
-                            cursor.moveToFirst();
-
-                            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                            String picturePath = cursor.getString(columnIndex);
-
-                            imgFood.setImageBitmap(BitmapFactory.decodeFile(picturePath));
-                            cursor.close();
-                        }
-                    }
-                    break;
-            }
-        }
-    }
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+//        if (resultCode == RESULT_OK && data != null) {
+//            switch (requestCode) {
+//                case REQUEST_PICTURE_CAPTURE:
+//                    Bitmap selectedImage = (Bitmap) data.getExtras().get("data");
+//                    imgFood.setImageBitmap(selectedImage);
+//                    break;
+//                case REQUEST_PICTURE_CHOOSE:
+//                    Uri uriSelectedImage = data.getData();
+//                    String[] filePathColumn = {MediaStore.Images.Media.DATA};
+//                    if (uriSelectedImage != null) {
+//                        Cursor cursor = getContentResolver().query(uriSelectedImage, filePathColumn, null, null, null);
+//                        if (cursor != null) {
+//                            cursor.moveToFirst();
+//
+//                            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+//                            String picturePath = cursor.getString(columnIndex);
+//
+//                            imgFood.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+//                            cursor.close();
+//                        }
+//                    }
+//                    break;
+//            }
+//        }
+//    }
 
     private void hideErrors() {
         tvIngredientInputError.setVisibility(View.GONE);
@@ -274,6 +354,7 @@ public class AddFoodActivity extends AppCompatActivity {
         FoodItem foodItem = new FoodItem();
         foodItem.setName(etFoodName.getText().toString());
         foodItem.setIngredients(ingredients);
+        foodItem.setDate(new Date());
 
         return foodItem;
     }
@@ -314,10 +395,10 @@ public class AddFoodActivity extends AppCompatActivity {
         invalidInputs.clear();
 
         /*
-            * Check ingredient NAME
-            * not empty
-            * between 3 - 15 characters
-        */
+         * Check ingredient NAME
+         * not empty
+         * between 3 - 15 characters
+         */
         if (etIngredientName.getText().toString().length() == 0) {
             errorMessage += "Ingredient NAME is required";
             if (!invalidInputs.contains(etIngredientName)) {
@@ -331,9 +412,9 @@ public class AddFoodActivity extends AppCompatActivity {
             }
         }
         /*
-            * Check ingredient CALORIES
-            * not empty
-        */
+         * Check ingredient CALORIES
+         * not empty
+         */
         if (etIngredientCalories.getText().toString().length() == 0) {
             errorMessage += "Ingredient CALORIES is required";
             if (!invalidInputs.contains(etIngredientCalories)) {
@@ -341,10 +422,10 @@ public class AddFoodActivity extends AppCompatActivity {
             }
         }
         /*
-            * Check ingredient CARBOHYDRATES
-            * not empty
-            * doesn't exceed no. of calories
-        */
+         * Check ingredient CARBOHYDRATES
+         * not empty
+         * doesn't exceed no. of calories
+         */
         if (etIngredientCarbohydrates.getText().toString().length() == 0) {
             errorMessage += "Ingredient CARBOHYDRATES is required";
             if (!invalidInputs.contains(etIngredientCarbohydrates)) {
@@ -370,10 +451,10 @@ public class AddFoodActivity extends AppCompatActivity {
             }
         }
         /*
-            * Check ingredient FATS
-            * not empty
-            * doesn't exceed no. of calories
-        */
+         * Check ingredient FATS
+         * not empty
+         * doesn't exceed no. of calories
+         */
         if (etIngredientFats.getText().toString().length() == 0) {
             errorMessage += "Ingredient FATS is required";
             if (!invalidInputs.contains(etIngredientFats)) {
@@ -393,10 +474,10 @@ public class AddFoodActivity extends AppCompatActivity {
             }
         }
         /*
-            * Check ingredient PROTEINS
-            * not empty
-            * doesn't exceed no. of calories
-        */
+         * Check ingredient PROTEINS
+         * not empty
+         * doesn't exceed no. of calories
+         */
         if (etIngredientProteins.getText().toString().length() == 0) {
             errorMessage += "Ingredient PROTEINS is required";
             if (!invalidInputs.contains(etIngredientProteins)) {
@@ -416,9 +497,9 @@ public class AddFoodActivity extends AppCompatActivity {
             }
         }
         /*
-            * Check ingredient MACRO's SUM
-            * doesn't exceed/is less than no. of calories
-        */
+         * Check ingredient MACRO's SUM
+         * doesn't exceed/is less than no. of calories
+         */
         int macroSum = nCarbohydrates + nFats + nProteins;
         if (macroSum != nCalories) {
             if (!invalidInputs.contains(etIngredientCalories)) {
@@ -453,17 +534,17 @@ public class AddFoodActivity extends AppCompatActivity {
         invalidInputs.clear();
 
         /*
-            * Check NAME
-            * not empty
-        */
+         * Check NAME
+         * not empty
+         */
         if (etFoodName.length() == 0) {
             errorMessage += "Food NAME field is required";
             invalidInputs.add(etFoodName);
         }
         /*
-            * Check INGREDIENTS LIST
-            * not empty
-        */
+         * Check INGREDIENTS LIST
+         * not empty
+         */
         if (ingredients.size() == 0) {
             errorMessage += "Please add at least 1 ingredient";
             invalidInputs.add(findViewById(R.id.add_food_input_ingredients));

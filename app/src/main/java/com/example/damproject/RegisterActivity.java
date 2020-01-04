@@ -1,14 +1,20 @@
 package com.example.damproject;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -16,6 +22,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -57,8 +64,7 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
-    ;
-
+    public final static int REQUEST_IMAGE_CAPTURE = 108;
     public final static String EDITED_USER_KEY = "new.user.key";
     public final static String USERNAME_KEY = "username.key";
     public final static String PASSOWRD_KEY = "password.key";
@@ -80,6 +86,9 @@ public class RegisterActivity extends AppCompatActivity {
     private Button btnCancel;
     private Button btnOpenDatePicker;
     private TextView tvErrorReport;
+
+    private Button btnAvatar;
+    private ImageView imgPreview;
 
     private Spinner spnWeight;
     private Spinner spnHeight;
@@ -114,6 +123,24 @@ public class RegisterActivity extends AppCompatActivity {
         etBirthday.setText(birthday);
         etWeight.setText(Float.toString(loggedUser.getWeight()));
         etHeight.setText(Float.toString(loggedUser.getHeight()));
+        imgPreview.setImageBitmap(loggedUser.getImg());
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            if (data != null) {
+                Bundle extras = data.getExtras();
+                if (extras != null) {
+                    Bitmap image = (Bitmap) extras.get("data");
+                    imgPreview.setImageBitmap(image);
+
+                    if (loggedUser != null) {
+                        loggedUser.setImg(image);
+                    }
+                }
+            }
+        }
     }
 
     private void initComponents() {
@@ -129,6 +156,8 @@ public class RegisterActivity extends AppCompatActivity {
         btnOpenDatePicker = findViewById(R.id.register_btn_open_dp);
         spnWeight = findViewById(R.id.register_spn_weight);
         spnHeight = findViewById(R.id.register_spn_height);
+        btnAvatar = findViewById(R.id.register_btn_avatar);
+        imgPreview = findViewById(R.id.register_img_preview);
 
         ArrayAdapter adapterWeight = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, getResources().getTextArray(R.array.weights_array));
         spnWeight.setAdapter(adapterWeight);
@@ -137,6 +166,36 @@ public class RegisterActivity extends AppCompatActivity {
 
         weightFrom = spnWeight.getSelectedItem().toString();
         heightFrom = spnHeight.getSelectedItem().toString();
+
+        btnAvatar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final String option_1 = getString(R.string.register_dialog_option_1);
+                final String option_2 = getString(R.string.register_dialog_option_2);
+                final String title = getString(R.string.register_dialog_title);
+
+                final CharSequence[] options = {option_1, option_2};
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
+                builder.setTitle(title);
+
+                builder.setItems(options, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (options[which].equals(option_1)) {
+                            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                            if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+                            }
+                        } else if (options[which].equals(option_2)) {
+                            //TODO: Implement
+                        }
+                    }
+                });
+
+                builder.show();
+            }
+        });
 
         spnWeight.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -208,9 +267,6 @@ public class RegisterActivity extends AppCompatActivity {
                         intent.putExtras(bundle);
                         // Edit user in the database
                         new UpdateUser().execute(loggedUser);
-
-                        Log.d("WTF", loggedUser.toString());
-                        Log.d("WTF", AppDatabase.getInstance(getApplicationContext()).userDao().getAllUsers().toString());
                     }
                     setResult(RESULT_OK, intent);
                     finish();
@@ -224,6 +280,8 @@ public class RegisterActivity extends AppCompatActivity {
                 }
             }
         });
+
+
 
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -392,6 +450,7 @@ public class RegisterActivity extends AppCompatActivity {
         }
         user.setWeight(Float.parseFloat(etWeight.getText().toString()));
         user.setHeight(Float.parseFloat(etHeight.getText().toString()));
+        user.setImg(((BitmapDrawable)imgPreview.getDrawable()).getBitmap());
 
         return user;
     }

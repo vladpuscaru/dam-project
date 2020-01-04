@@ -14,7 +14,7 @@ import com.example.damproject.db.model.FoodItem;
 import com.example.damproject.db.model.Ingredient;
 import com.example.damproject.db.model.User;
 
-@Database(entities = {User.class, FoodItem.class, Ingredient.class}, version = 9, exportSchema = false)
+@Database(entities = {User.class, FoodItem.class, Ingredient.class}, version = 10, exportSchema = false)
 @TypeConverters({DbConverters.class})
 public abstract class AppDatabase extends RoomDatabase {
     private static final String DB_NAME = "faap_db";

@@ -1,5 +1,8 @@
 package com.example.damproject.db.model;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -7,9 +10,12 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
+import androidx.room.util.TableInfo;
 
 import com.example.damproject.MainActivity;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -36,6 +42,8 @@ public class User implements Parcelable, Serializable {
     private String weightMeasureUnit;
     @ColumnInfo(name = "height_measure_unit")
     private String heightMeasureUnit;
+    @ColumnInfo(name ="img", typeAffinity = ColumnInfo.BLOB)
+    private Bitmap img;
 
     public String getWeightMeasureUnit() {
         return weightMeasureUnit;
@@ -87,6 +95,7 @@ public class User implements Parcelable, Serializable {
         this.birthday = birthday;
         this.weight = weight;
         this.height = height;
+        this.img = null;
     }
 
     @Ignore
@@ -104,6 +113,20 @@ public class User implements Parcelable, Serializable {
         height = in.readFloat();
         weightMeasureUnit = in.readString();
         heightMeasureUnit = in.readString();
+
+        // read bytes and reconstruct bitmap
+        byte[] byteArray = in.createByteArray();
+        if (byteArray != null) {
+            img = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+        }
+    }
+
+    public Bitmap getImg() {
+        return img;
+    }
+
+    public void setImg(Bitmap img) {
+        this.img = img;
     }
 
     @Ignore
@@ -178,5 +201,12 @@ public class User implements Parcelable, Serializable {
         dest.writeFloat(height);
         dest.writeString(weightMeasureUnit);
         dest.writeString(heightMeasureUnit);
+
+        // write bitmap
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        img.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        byte[] byteArray = stream.toByteArray();
+
+        dest.writeByteArray(byteArray);
     }
 }

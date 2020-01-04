@@ -9,6 +9,7 @@ import com.example.damproject.db.AppDatabase;
 import com.example.damproject.db.model.FoodItem;
 import com.example.damproject.fragments.FoodListFragment;
 import com.example.damproject.fragments.HomeFragment;
+import com.example.damproject.fragments.IngredientManagerFragment;
 import com.example.damproject.fragments.JournalFragment;
 import com.example.damproject.fragments.AboutFragment;
 import com.example.damproject.db.model.User;
@@ -113,6 +114,9 @@ public class MainActivity extends AppCompatActivity {
                         case R.id.nav_about:
                             currentFragment = createAboutFragment();
                             break;
+                        case R.id.nav_ingredient_manager:
+                            currentFragment = createIngredientManagerFragment();
+                            break;
                     }
 
                     openFragment();
@@ -165,5 +169,8 @@ public class MainActivity extends AppCompatActivity {
         return fragment;
     }
 
-
+    private Fragment createIngredientManagerFragment() {
+        Fragment fragment = new IngredientManagerFragment();
+        return fragment;
+    }
 }

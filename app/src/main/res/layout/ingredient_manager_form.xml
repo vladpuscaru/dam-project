@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@android:color/darker_gray"
+    android:padding="@dimen/app_padding">
+
+    <EditText
+        android:id="@+id/ingredient_manager_et_name"
+        android:layout_width="match_parent"
+        android:textColorHint="@android:color/white"
+        android:backgroundTint="@android:color/white"
+        android:layout_height="wrap_content"
+        android:hint="@string/ingredient_manager_et_name_hint"
+        android:inputType="text" />
+
+    <EditText
+        android:id="@+id/ingredient_manager_et_calories"
+        android:layout_width="match_parent"
+        android:textColorHint="@android:color/white"
+        android:backgroundTint="@android:color/white"
+        android:layout_height="wrap_content"
+        android:hint="@string/ingredient_manager_et_calories_hint"
+        android:inputType="number" />
+
+    <EditText
+        android:id="@+id/ingredient_manager_et_carbohydrates"
+        android:layout_width="match_parent"
+        android:textColorHint="@android:color/white"
+        android:backgroundTint="@android:color/white"
+        android:layout_height="wrap_content"
+        android:hint="@string/ingredient_manager_et_carbohydrates_hint"
+        android:inputType="number" />
+
+    <EditText
+        android:id="@+id/ingredient_manager_et_fats"
+        android:layout_width="match_parent"
+        android:textColorHint="@android:color/white"
+        android:backgroundTint="@android:color/white"
+        android:layout_height="wrap_content"
+        android:hint="@string/ingredient_manager_et_fats_hint"
+        android:inputType="number" />
+
+    <EditText
+        android:id="@+id/ingredient_manager_et_proteins"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColorHint="@android:color/white"
+        android:backgroundTint="@android:color/white"
+        android:hint="@string/ingredient_manager_et_proteins_hint"
+        android:inputType="number" />
+
+</LinearLayout>

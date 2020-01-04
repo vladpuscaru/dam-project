@@ -32,7 +32,7 @@ public class FoodListAdapter extends ArrayAdapter<FoodItem> {
 
     // UI Components
     private static class ViewHolder {
-        private ImageView imgFood;
+//        private ImageView imgFood;
         private TextView tvFoodTitle;
         private TextView tvFoodCalories;
         private TextView tvFoodCarbohydrates;

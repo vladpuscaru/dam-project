@@ -1,9 +1,13 @@
 package com.example.damproject.db;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
 import androidx.room.TypeConverter;
 
 import com.example.damproject.db.model.Ingredient;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -63,5 +67,19 @@ public class DbConverters {
         list.setLength(list.length() - 1);
 
         return list.toString();
+    }
+
+    @TypeConverter
+    public static byte[] fromBitmap(Bitmap value) {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        value.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        byte[] byteArray = stream.toByteArray();
+
+        return byteArray;
+    }
+
+    @TypeConverter
+    public static Bitmap byteArraytoBitMap(byte[] value) {
+        return BitmapFactory.decodeByteArray(value, 0, value.length);
     }
 }

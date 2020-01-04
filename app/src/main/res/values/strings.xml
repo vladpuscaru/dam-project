@@ -21,6 +21,9 @@
     <string name="test_text">Lorem ipsum</string>
     <!-- TODO: Delete test_text before finishing  -->
 
+    <string name="home_dialog_option_2">Choose from Database</string>
+    <string name="home_dialog_option_1">Create a new food item</string>
+    <string name="home_dialog_title">Add to your menu</string>
     <string name="home_section_2_title">Today\'s track</string>
     <string name="home_subsection_food_title">FOOD</string>
     <string name="home_subsection_food_button">ADD FOOD TO </string>
@@ -37,6 +40,9 @@
     <string name="register_input_weight_label">Weight</string>
     <string name="register_input_height_label">Height</string>
     <string name="register_input_image">Avatar</string>
+    <string name="register_dialog_option_1">Take Picture</string>
+    <string name="register_dialog_option_2">Choose from Gallery</string>
+    <string name="register_dialog_title">Add avatar</string>
     <string name="register_btn_register">Register</string>
     <string name="register_btn_save">Save</string>
     <string name="add_food_name_label">Name</string>
@@ -150,4 +156,30 @@
     <string name="maps_faap_center_4_snippet">FAAP Center</string>
     <string name="maps_btn_label">Find the nearest FAAP center</string>
 
+    <string name="add_food_input_ingredients_switch_on_label">Create ingredient</string>
+    <string name="add_food_input_ingredients_switch_off_label">Choose ingredient</string>
+    <string name="add_food_add_ingredient_description_choose">Choose ingredient from the realtime database</string>
+
+    <string name="ingredient_manager_title">Ingredient Manager</string>
+    <string name="ingredient_manager_info">Here you can manage the ingredients in the realtime database provided by Firebase</string>
+
+    <string name="ingredient_manager_add_title">Add ingredient</string>
+    <string name="ingredient_manager_et_name_hint">Ingredient Name</string>
+    <string name="ingredient_manager_et_calories_hint">Calories</string>
+    <string name="ingredient_manager_et_carbohydrates_hint">Carbohydrates</string>
+    <string name="ingredient_manager_et_fats_hint">Fats</string>
+    <string name="ingredient_manager_et_proteins_hint">Proteins</string>
+    <string name="ingredient_manager_form_error">Form is not valid!</string>
+    <string name="ingredient_manager_ingredient_added">Ingredient added: </string>
+    <string name="ingredient_manager_ingredient_edited">Ingredient edited: </string>
+    <string name="ingredient_manager_ingredient_deleted">Ingredient deleted: </string>
+    <string name="home_btn_avatar_label">+</string>
+    <string name="home_section_graph_title">Overall Statistics</string>
+    <string name="home_overall_total_title">Total values</string>
+    <string name="home_overall_today_title">Today values</string>
+
+    <string name="home_chart_total_description">Overall consumption</string>
+    <string name="home_chart_total_center_text">Macro</string>
+    <string name="home_chart_today_description">Today consumption</string>
+    <string name="home_chart_today_center_text">Macro</string>
 </resources>

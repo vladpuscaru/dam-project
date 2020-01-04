@@ -103,10 +103,12 @@ public class FoodItem implements Parcelable {
         userId = in.readLong();
         type = in.readString();
 
-        if (in.readString() != null) {
+        String strDate = in.readString();
+
+        if (strDate != null) {
             try {
                 this.date = new SimpleDateFormat(MainActivity.DATE_FORMAT,
-                        Locale.US).parse(in.readString());
+                        Locale.US).parse(strDate);
             } catch (ParseException e) {
                 e.printStackTrace();
             }

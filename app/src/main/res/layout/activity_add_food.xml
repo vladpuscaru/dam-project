@@ -20,9 +20,9 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:layout_marginRight="@dimen/register_input_margin_left"
                 android:layout_marginEnd="@dimen/register_input_margin_left"
+                android:layout_marginRight="@dimen/register_input_margin_left"
+                android:gravity="center_vertical"
                 android:text="@string/add_food_name_label"
                 android:textSize="@dimen/register_text_size" />
 
@@ -35,48 +35,48 @@
                 android:textSize="@dimen/register_text_size" />
 
         </LinearLayout>
-        <!-- Food Picture -->
-        <LinearLayout
-            android:id="@+id/add_food_input_picture"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/add_food_input_name"
-            android:orientation="vertical">
+<!--        &lt;!&ndash; Food Picture &ndash;&gt;-->
+<!--        <LinearLayout-->
+<!--            android:id="@+id/add_food_input_picture"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_below="@+id/add_food_input_name"-->
+<!--            android:orientation="vertical">-->
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:orientation="horizontal">-->
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:text="@string/add_food_input_picture_label"
-                    android:textSize="@dimen/register_text_size" />
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_gravity="center_vertical"-->
+<!--                    android:text="@string/add_food_input_picture_label"-->
+<!--                    android:textSize="@dimen/register_text_size" />-->
 
-                <Button
-                    android:id="@+id/add_food_input_picture_btn"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/add_food_input_picture_btn_label" />
+<!--                <Button-->
+<!--                    android:id="@+id/add_food_input_picture_btn"-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:text="@string/add_food_input_picture_btn_label" />-->
 
-            </LinearLayout>
+<!--            </LinearLayout>-->
 
-            <ImageView
-                android:id="@+id/add_food_input_picture_img"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+<!--            <ImageView-->
+<!--                android:id="@+id/add_food_input_picture_img"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content" />-->
 
-        </LinearLayout>
+<!--        </LinearLayout>-->
 
         <!-- Ingredients -->
         <LinearLayout
             android:id="@+id/add_food_input_ingredients"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/add_food_input_picture"
+            android:layout_below="@+id/add_food_input_name"
             android:layout_marginTop="@dimen/activity_vertical_margin"
             android:layout_marginBottom="@dimen/activity_vertical_margin"
             android:orientation="vertical">
@@ -89,18 +89,26 @@
                 android:textSize="@dimen/home_subsection_title_size" />
 
             <TextView
+                android:id="@+id/add_food_input_ingredients_tv_info"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/add_food_add_ingredient_description"
                 android:textAlignment="center"
                 android:textSize="@dimen/login_footer_text_size" />
 
+            <Switch
+                android:id="@+id/add_food_input_ingredients_switch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/add_food_input_ingredients_switch_off_label" />
+
             <!-- Create Ingredient -->
             <LinearLayout
                 android:id="@+id/add_food_input_ingredients_create"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="gone">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -225,6 +233,23 @@
 
             </LinearLayout>
 
+            <!-- Choose Ingredient -->
+            <LinearLayout
+                android:id="@+id/add_food_input_ingredients_choose"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Spinner
+                    android:id="@+id/add_food_input_ingredients_spn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/activity_vertical_margin"
+                    android:layout_marginBottom="@dimen/activity_vertical_margin"
+                    android:layout_gravity="center_vertical" />
+
+            </LinearLayout>
+
             <!-- Ingredient Error Message -->
             <TextView
                 android:id="@+id/add_food_input_ingredients_error"
@@ -235,6 +260,7 @@
                 android:textColor="@android:color/holo_red_dark"
                 android:textSize="@dimen/register_error_text_size" />
 
+            <!-- Add Ingredient Button -->
             <Button
                 android:id="@+id/add_food_btn_add_ingredient"
                 android:layout_width="match_parent"

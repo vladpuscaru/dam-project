@@ -1,8 +1,10 @@
 package com.example.damproject.fragments;
 
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -29,6 +31,15 @@ import com.example.damproject.db.AppDatabase;
 import com.example.damproject.db.model.FoodItem;
 import com.example.damproject.util.UTIL;
 import com.example.damproject.db.model.User;
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Description;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.highlight.Highlight;
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -55,6 +66,9 @@ public class HomeFragment extends Fragment {
 
     private ArrayList<Integer> selectedIndices = new ArrayList<>();
 
+    private int[] totalDataToday = new int[3];
+    private int[] totalDataOverall = new int[3];
+
     //    UI Components
     private ImageView ivUserImg;
     private TextView tvUserName;
@@ -70,6 +84,9 @@ public class HomeFragment extends Fragment {
     private Button btnListDinner;
     private Button btnListSnacks;
     private ListView lvFood;
+
+    private PieChart pieChartToday;
+    private PieChart pieChartTotal;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -100,6 +117,9 @@ public class HomeFragment extends Fragment {
     }
 
     private void initComponents(final View view) {
+        getDataForToday();
+        getDataOverall();
+
         loggedUser = getArguments().getParcelable(LoginActivity.USER_KEY);
         foodBreakfast = getArguments().getParcelableArrayList(MainActivity.BREAKFAST_LIST_KEY);
         foodLunch = getArguments().getParcelableArrayList(MainActivity.LUNCH_LIST_KEY);
@@ -119,6 +139,13 @@ public class HomeFragment extends Fragment {
         btnListLunch = view.findViewById(R.id.home_btn_subsection_food_lunch);
         btnListDinner = view.findViewById(R.id.home_btn_subsection_food_dinner);
         btnListSnacks = view.findViewById(R.id.home_btn_subsection_food_snacks);
+
+        pieChartToday = view.findViewById(R.id.home_chart_today);
+        pieChartTotal = view.findViewById(R.id.home_chart_total);
+
+        setupPieCharts();
+
+        ivUserImg.setImageBitmap(loggedUser.getImg());
 
         deActivateButtons();
         setActiveButton(view, btnListBreakfast.getId());
@@ -158,23 +185,23 @@ public class HomeFragment extends Fragment {
         btnAddFood.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final CharSequence[] options = {"Create a new food item", "Choose from Database"};
+                final CharSequence[] options = {getString(R.string.home_dialog_option_1), getString(R.string.home_dialog_option_2)};
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
-                builder.setTitle("Add to your menu");
+                builder.setTitle(getString(R.string.home_dialog_title));
 
                 builder.setItems(options, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if (options[which].equals("Create a new food item")) {
+                        if (options[which].equals(getString(R.string.home_dialog_option_1))) {
                             Intent intent = new Intent(view.getContext(), AddFoodActivity.class);
                             Bundle bundle = new Bundle();
                             bundle.putParcelable(LOGGED_USER_KEY, loggedUser);
                             bundle.putString(FOOD_TYPE_KEY, getCurrentFoodType());
                             intent.putExtras(bundle);
                             startActivityForResult(intent, ADD_FOOD_REQUEST);
-                        } else if (options[which].equals("Choose from Database")) {
-
+                        } else if (options[which].equals(getString(R.string.home_dialog_option_2))) {
+                            //TODO: Implement
                         }
                     }
                 });
@@ -257,6 +284,141 @@ public class HomeFragment extends Fragment {
                 }.execute();
             }
         });
+    }
+
+    private void addDataToChart(PieChart chart, int[] data) {
+        ArrayList<PieEntry> yEntries = new ArrayList<>();
+        ArrayList<String> xEntries = new ArrayList<>();
+        xEntries.add("Calories");
+        xEntries.add("Fats");
+        xEntries.add("Proteins");
+        int[] colors = new int[]{Color.YELLOW, Color.RED, Color.GREEN};
+
+        for (int i = 0; i < data.length; i++) {
+            yEntries.add(new PieEntry(data[i], i));
+        }
+        PieDataSet pieDataSet = new PieDataSet(yEntries, "Macronutrients");
+        pieDataSet.setSliceSpace(2);
+        pieDataSet.setValueTextSize(12);
+        pieDataSet.setColors(colors);
+
+        Legend legend = chart.getLegend();
+        legend.setForm(Legend.LegendForm.SQUARE);
+        legend.setDirection(Legend.LegendDirection.LEFT_TO_RIGHT);
+
+        PieData pieData = new PieData(pieDataSet);
+        chart.setData(pieData);
+        chart.invalidate();
+
+        chart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+            @Override
+            public void onValueSelected(Entry e, Highlight h) {
+
+            }
+
+            @Override
+            public void onNothingSelected() {
+
+            }
+        });
+    }
+
+    private void setupPieCharts() {
+        Description totalDescription = new Description();
+        totalDescription.setText(getString(R.string.home_chart_total_description));
+        pieChartTotal.setDescription(totalDescription);
+        pieChartTotal.setRotationEnabled(true);
+        pieChartTotal.setHoleRadius(25f);
+        pieChartTotal.setTransparentCircleAlpha(0);
+        pieChartTotal.setCenterText(getString(R.string.home_chart_total_center_text));
+        pieChartTotal.setCenterTextSize(10);
+        pieChartTotal.setDrawEntryLabels(true);
+
+        addDataToChart(pieChartTotal, totalDataOverall);
+
+
+        Description todayDescription = new Description();
+        todayDescription.setText(getString(R.string.home_chart_total_description));
+        pieChartToday.setDescription(todayDescription);
+        pieChartToday.setRotationEnabled(true);
+        pieChartToday.setHoleRadius(25f);
+        pieChartToday.setTransparentCircleAlpha(0);
+        pieChartToday.setCenterText(getString(R.string.home_chart_total_center_text));
+        pieChartToday.setCenterTextSize(10);
+        pieChartToday.setDrawEntryLabels(true);
+
+        addDataToChart(pieChartToday, totalDataToday);
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    private void getDataOverall() {
+        new AsyncTask<Void, Void, List<FoodItem>>() {
+            @Override
+            protected List<FoodItem> doInBackground(Void... voids) {
+                return AppDatabase.getInstance(getContext()).foodItemDao().getAllFoodItems();
+            }
+
+            @Override
+            protected void onPostExecute(List<FoodItem> foodItems) {
+                int totalCarbs = 0;
+                int totalFats = 0;
+                int totalProteins = 0;
+
+                if (foodItems != null) {
+                    for (FoodItem f : foodItems) {
+                        totalCarbs += f.getTotalCarbohydrates();
+                        totalFats += f.getTotalFats();
+                        totalProteins += f.getTotalFats();
+                    }
+                }
+
+                totalDataOverall[0] = totalCarbs;
+                totalDataOverall[1] = totalFats;
+                totalDataOverall[2] = totalProteins;
+            }
+        }.execute();
+    }
+
+    private void getDataForToday() {
+        int totalCarbs = 0;
+        int totalFats = 0;
+        int totalProteins = 0;
+
+        if (foodBreakfast != null) {
+            for (FoodItem f : foodBreakfast) {
+                totalCarbs += f.getTotalCarbohydrates();
+                totalFats += f.getTotalFats();
+                totalProteins += f.getTotalFats();
+            }
+        }
+
+        if (foodDinner != null) {
+            for (FoodItem f : foodDinner) {
+                totalCarbs += f.getTotalCarbohydrates();
+                totalFats += f.getTotalFats();
+                totalProteins += f.getTotalFats();
+            }
+        }
+
+        if (foodLunch != null) {
+            for (FoodItem f : foodLunch) {
+                totalCarbs += f.getTotalCarbohydrates();
+                totalFats += f.getTotalFats();
+                totalProteins += f.getTotalFats();
+            }
+        }
+
+        if (foodSnacks != null) {
+            for (FoodItem f : foodSnacks) {
+                totalCarbs += f.getTotalCarbohydrates();
+                totalFats += f.getTotalFats();
+                totalProteins += f.getTotalFats();
+            }
+        }
+
+        totalDataToday[0] = totalCarbs;
+        totalDataToday[1] = totalFats;
+        totalDataToday[2] = totalProteins;
     }
 
     private void setSelectedItemState(View selected, boolean b) {

@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@android:color/white"
     android:layout_height="match_parent"
+    android:background="@android:color/white"
     tools:context=".fragments.HomeFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -22,7 +22,7 @@
             <ImageView
                 android:id="@+id/home_img_user"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_alignParentTop="true"
                 android:src="@mipmap/ic_launcher_round" />
 
@@ -36,13 +36,6 @@
                 android:layout_toRightOf="@+id/home_img_user"
                 android:text="@string/test_text" />
 
-            <Button
-                android:id="@+id/home_btn_user_edit"
-                style="?android:attr/borderlessButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/home_img_user"
-                android:text="@string/home_btn_edit_user" />
 
             <TextView
                 android:id="@+id/home_tv_user_age"
@@ -54,6 +47,17 @@
                 android:layout_toEndOf="@+id/home_img_user"
                 android:layout_toRightOf="@+id/home_img_user"
                 android:text="@string/test_text" />
+
+            <Button
+                android:id="@+id/home_btn_user_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/home_tv_user_age"
+                android:layout_centerHorizontal="true"
+                android:layout_toEndOf="@+id/home_img_user"
+                android:layout_toRightOf="@+id/home_img_user"
+                android:background="@android:drawable/btn_default"
+                android:text="@string/home_btn_edit_user" />
 
             <TextView
                 android:id="@+id/home_tv_user_weight"
@@ -87,6 +91,84 @@
             android:background="?android:attr/listDivider"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/home_section_user_info" />
+
+        <!-- Today's Graph -->
+        <LinearLayout
+            android:id="@+id/home_section_today_graph"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/home_divider_1">
+
+            <TextView
+                android:id="@+id/home_tv_section_graph_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/app_padding"
+                android:gravity="center"
+                android:text="@string/home_section_graph_title"
+                android:textSize="@dimen/home_section_title_size" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <!-- Today -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".5"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:text="@string/home_overall_today_title" />
+
+                    <com.github.mikephil.charting.charts.PieChart
+                        android:id="@+id/home_chart_today"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
+                </LinearLayout>
+
+                <!-- Total -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".5"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:text="@string/home_overall_total_title" />
+
+                    <com.github.mikephil.charting.charts.PieChart
+                        android:id="@+id/home_chart_total"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Divider -->
+        <View
+            android:id="@+id/home_divider_2"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/home_section_today_graph" />
+
+
         <!-- Today's Track -->
         <LinearLayout
             android:id="@+id/home_section_today_track"
@@ -95,15 +177,15 @@
             android:orientation="vertical"
             android:padding="@dimen/home_section_padding"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/home_divider_1">
+            app:layout_constraintTop_toBottomOf="@+id/home_divider_2">
 
 
             <TextView
                 android:id="@+id/home_tv_section_2_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
                 android:layout_marginBottom="@dimen/app_padding"
+                android:gravity="center"
                 android:text="@string/home_section_2_title"
                 android:textSize="@dimen/home_section_title_size" />
 
@@ -132,7 +214,6 @@
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent">
-
 
                             <Button
                                 android:id="@+id/home_btn_subsection_food_breakfast"
@@ -207,7 +288,7 @@
         </LinearLayout>
 
         <View
-            android:id="@+id/home_divider_2"
+            android:id="@+id/home_divider_3"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="?android:attr/listDivider"
