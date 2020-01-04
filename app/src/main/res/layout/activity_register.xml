@@ -187,7 +187,7 @@
                         android:layout_marginStart="@dimen/register_input_margin_left"
                         android:layout_marginLeft="@dimen/register_input_margin_left"
                         android:layout_weight="1"
-                        android:inputType="number"
+                        android:inputType="numberDecimal"
                         android:textSize="@dimen/register_text_size" />
 
                     <Spinner
@@ -227,7 +227,7 @@
                         android:layout_marginStart="@dimen/register_input_margin_left"
                         android:layout_marginLeft="@dimen/register_input_margin_left"
                         android:layout_weight="1"
-                        android:inputType="number"
+                        android:inputType="numberDecimal"
                         android:textSize="@dimen/register_text_size" />
 
                     <Spinner

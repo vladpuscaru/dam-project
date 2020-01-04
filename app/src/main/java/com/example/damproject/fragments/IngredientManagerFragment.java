@@ -124,7 +124,9 @@ public class IngredientManagerFragment extends Fragment {
                             }
                         });
                     } else {
-                        db.child(ingredientToBeEdited.getFbId()).setValue(ingredientToBeEdited).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        String id = ingredientToBeEdited.getFbId();
+                        ingredientToBeEdited = new Ingredient(id, ingredient);
+                        db.child(id).setValue(ingredientToBeEdited).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
                                 Toast.makeText(
@@ -221,6 +223,7 @@ public class IngredientManagerFragment extends Fragment {
             }
         });
 
+        fabDelete.setEnabled(false);
         fabUpdate.setEnabled(false);
 
         updateIngredientListText();
@@ -316,6 +319,12 @@ public class IngredientManagerFragment extends Fragment {
             ingredientToBeEdited = null;
         } else {
             fabUpdate.setEnabled(true);
+        }
+
+        if (posSelected.size() > 0) {
+            fabDelete.setEnabled(true);
+        } else {
+            fabDelete.setEnabled(false);
         }
     }
 

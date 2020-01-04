@@ -8,4 +8,8 @@
     <color name="colorCarbohydrates">#218380</color>
     <color name="colorFat">#E53D00</color>
     <color name="colorProtein">#FFE900</color>
+    <color name="colorBreakfast">#A3A380</color>
+    <color name="colorLunch">#D6CE93</color>
+    <color name="colorDinner">#EFEBCE</color>
+    <color name="colorSnacks">#D8A48F</color>
 </resources>

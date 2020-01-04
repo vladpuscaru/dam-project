@@ -3,6 +3,7 @@ package com.example.damproject;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -52,6 +53,7 @@ public class LoginActivity extends AppCompatActivity {
         pb = findViewById(R.id.login_pb);
 
         btnLogIn.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("StaticFieldLeak")
             @Override
             public void onClick(View v) {
                 User tryingToLoggin = new User(etUsername.getText().toString(), etPassword.getText().toString(), null, 0.2f, 0.2f);

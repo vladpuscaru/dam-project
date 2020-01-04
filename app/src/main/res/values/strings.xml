@@ -31,6 +31,8 @@
     <string name="home_btn_subsection_food_lunch">LUNCH</string>
     <string name="home_btn_subsection_food_dinner">DINNER</string>
     <string name="home_btn_subsection_food_snacks">SNACKS</string>
+    <string name="home_chart_category_text">Category consumption</string>
+    <string name="home_pick_dialog_title">Pick food item</string>
     <string name="register_input_username_label">Username</string>
     <string name="register_input_password_label">Password</string>
     <string name="register_input_confirm_password_label">Confirm password</string>
@@ -53,8 +55,8 @@
     <string name="add_food_ingredients_create_name_label">Name</string>
     <string name="add_food_ingredients_create_calories_label">Calories</string>
     <string name="add_food_ingredients_create_carbohydrates_label">Carbohydrates</string>
-    <string name="add_food_ingredients_create_fat_label">Fat</string>
-    <string name="add_food_ingredients_create_protein_label">Protein</string>
+    <string name="add_food_ingredients_create_fat_label">Fats</string>
+    <string name="add_food_ingredients_create_protein_label">Proteins</string>
     <string name="add_food_ingredients_btn_label">ADD INGREDIENT</string>
     <string name="add_food_btn_label">SUBMIT</string>
     <string name="test_number">28</string>
@@ -70,6 +72,8 @@
     <string name="food_list_title">Elevated recipes</string>
     <string name="add_food_input_picture_label">Picture</string>
     <string name="add_food_input_picture_btn_label">+</string>
+
+
 
     <string name="error_date_format">Date format should be dd-MM-yyyy</string>
     <string name="dialog_positive_button_label">Ok</string>
@@ -88,7 +92,9 @@
 
     <string-array name="features_array">
         <item>Track daily food consumption</item>
-        <item>Create new recipes</item>
+        <item>Create personalized meals</item>
+        <item>Search for recipes</item>
+        <item>Many more to follow..</item>
     </string-array>
 
     <string name="food_list_btn_search_label">Search</string>
@@ -182,4 +188,5 @@
     <string name="home_chart_total_center_text">Macro</string>
     <string name="home_chart_today_description">Today consumption</string>
     <string name="home_chart_today_center_text">Macro</string>
+    <string name="menu_item_ingredient">Ingredient Manager</string>
 </resources>

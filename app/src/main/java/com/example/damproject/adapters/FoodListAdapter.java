@@ -86,8 +86,9 @@ public class FoodListAdapter extends ArrayAdapter<FoodItem> {
 
         StringBuilder strIngredients = new StringBuilder();
         for (Ingredient i : current.getIngredients()) {
-            strIngredients.append(i.getName());
+            strIngredients.append(i.getName()).append(", ");
         }
+        strIngredients.delete(strIngredients.length() - 2, strIngredients.length() - 1);
         viewHolder.tvIngredients.setText(strIngredients.toString());
 
         viewHolder.tvFoodCarbohydrates.setText(String.format(Locale.US, "%d carbs", current.getTotalCarbohydrates()));

@@ -114,6 +114,7 @@ public class RegisterActivity extends AppCompatActivity {
         } else {
             loggedUser = null;
         }
+
     }
 
     private void setCurrentUserData() {
@@ -121,9 +122,25 @@ public class RegisterActivity extends AppCompatActivity {
         etPassword.setText(loggedUser.getPassword());
         String birthday = new SimpleDateFormat(MainActivity.DATE_FORMAT, Locale.US).format(loggedUser.getBirthday());
         etBirthday.setText(birthday);
-        etWeight.setText(Float.toString(loggedUser.getWeight()));
-        etHeight.setText(Float.toString(loggedUser.getHeight()));
+        etWeight.setText(String.valueOf(loggedUser.getWeight()), TextView.BufferType.EDITABLE);
+        etHeight.setText(String.valueOf(loggedUser.getHeight()), TextView.BufferType.EDITABLE);
         imgPreview.setImageBitmap(loggedUser.getImg());
+
+        int size = spnWeight.getAdapter().getCount();
+        for (int i = 0; i < size; i++) {
+            if (spnWeight.getAdapter().getItem(i).toString().equalsIgnoreCase(loggedUser.getWeightMeasureUnit())) {
+                spnWeight.setSelection(i);
+            }
+        }
+
+        size = spnHeight.getAdapter().getCount();
+        for (int i = 0; i < size; i++) {
+            if (spnHeight.getAdapter().getItem(i).toString().equalsIgnoreCase(loggedUser.getHeightMeasureUnit())) {
+                spnHeight.setSelection(i);
+            }
+        }
+
+
     }
 
     @Override

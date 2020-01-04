@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.view.ViewCompat;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -19,7 +20,9 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.damproject.AddFoodActivity;
 import com.example.damproject.LoginActivity;
@@ -29,17 +32,10 @@ import com.example.damproject.RegisterActivity;
 import com.example.damproject.adapters.FoodListAdapter;
 import com.example.damproject.db.AppDatabase;
 import com.example.damproject.db.model.FoodItem;
+import com.example.damproject.db.model.Ingredient;
 import com.example.damproject.util.UTIL;
 import com.example.damproject.db.model.User;
 import com.github.mikephil.charting.charts.PieChart;
-import com.github.mikephil.charting.components.Description;
-import com.github.mikephil.charting.components.Legend;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.PieData;
-import com.github.mikephil.charting.data.PieDataSet;
-import com.github.mikephil.charting.data.PieEntry;
-import com.github.mikephil.charting.highlight.Highlight;
-import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -47,6 +43,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+
+import lecho.lib.hellocharts.listener.PieChartOnValueSelectListener;
+import lecho.lib.hellocharts.model.PieChartData;
+import lecho.lib.hellocharts.model.SliceValue;
+import lecho.lib.hellocharts.view.PieChartView;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -58,11 +59,17 @@ public class HomeFragment extends Fragment {
     public final static int EDIT_USER_REQUEST = 90;
     public final static int ADD_FOOD_REQUEST = 80;
 
+    private AlertDialog.Builder pickDialog;
+    private View pickView;
+    private ListView lvPickForm;
+
     private User loggedUser;
     private ArrayList<FoodItem> foodBreakfast;
     private ArrayList<FoodItem> foodLunch;
     private ArrayList<FoodItem> foodDinner;
     private ArrayList<FoodItem> foodSnacks;
+
+    private ArrayList<FoodItem> foodPick = new ArrayList<>();
 
     private ArrayList<Integer> selectedIndices = new ArrayList<>();
 
@@ -85,8 +92,11 @@ public class HomeFragment extends Fragment {
     private Button btnListSnacks;
     private ListView lvFood;
 
-    private PieChart pieChartToday;
-    private PieChart pieChartTotal;
+    private ProgressBar progressBar;
+
+    private PieChartView pieChartToday;
+    private PieChartView pieChartTotal;
+    private PieChartView pieChartCategory;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -99,32 +109,24 @@ public class HomeFragment extends Fragment {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_home, container, false);
 
-        // TODO: remove this test list init
-//        List<Ingredient> testIngredients1 = new ArrayList<>();
-//        testIngredients1.add(new Ingredient("Cheese", 200, 10, 50, 140));
-//        testIngredients1.add(new Ingredient("Bread", 20, 10, 5, 5));
-//        List<Ingredient> testIngredients = new ArrayList<>();
-//        testIngredients.add(new Ingredient("Bacon", 190, 70, 80, 40));
-//        testIngredients.add(new Ingredient("Bread", 60, 30, 10, 20));
-//        foodBreakfast.add(new FoodItem("Sandwich BLT", testIngredients));
-//        foodBreakfast.add(new FoodItem("Cheesewich", testIngredients1));
-        // TODO: remove this test list init
-
-
         initComponents(view);
 
         return view;
     }
 
     private void initComponents(final View view) {
-        getDataForToday();
-        getDataOverall();
+
 
         loggedUser = getArguments().getParcelable(LoginActivity.USER_KEY);
         foodBreakfast = getArguments().getParcelableArrayList(MainActivity.BREAKFAST_LIST_KEY);
         foodLunch = getArguments().getParcelableArrayList(MainActivity.LUNCH_LIST_KEY);
         foodDinner = getArguments().getParcelableArrayList(MainActivity.DINNER_LIST_KEY);
         foodSnacks = getArguments().getParcelableArrayList(MainActivity.SNACKS_LIST_KEY);
+
+//        Log.d("WTF", "\nBREAKFAST: " + "\n" + foodBreakfast + "\n");
+//        Log.d("WTF", "LUNCH: " + "\n" + foodLunch + "\n");
+//        Log.d("WTF", "DINNER: " + "\n" + foodDinner + "\n");
+//        Log.d("WTF", "SNACKS: " + "\n" + foodSnacks + "\n");
 
         ivUserImg = view.findViewById(R.id.home_img_user);
         tvUserName = view.findViewById(R.id.home_tv_user_name);
@@ -139,11 +141,32 @@ public class HomeFragment extends Fragment {
         btnListLunch = view.findViewById(R.id.home_btn_subsection_food_lunch);
         btnListDinner = view.findViewById(R.id.home_btn_subsection_food_dinner);
         btnListSnacks = view.findViewById(R.id.home_btn_subsection_food_snacks);
+        progressBar = view.findViewById(R.id.home_pb);
+
 
         pieChartToday = view.findViewById(R.id.home_chart_today);
         pieChartTotal = view.findViewById(R.id.home_chart_total);
+        pieChartCategory = view.findViewById(R.id.home_chart_category);
 
-        setupPieCharts();
+        pieChartCategory.setOnValueTouchListener(new PieChartOnValueSelectListener() {
+            @Override
+            public void onValueSelected(int arcIndex, SliceValue value) {
+                Toast.makeText(
+                        getContext(),
+                        String.valueOf(value.getLabelAsChars()) + ": " + value.getValue() + " calories",
+                        Toast.LENGTH_SHORT
+                ).show();
+            }
+
+            @Override
+            public void onValueDeselected() {
+                return;
+            }
+        });
+
+        getDataForToday();
+        getDataOverall();
+        getDataForCategory();
 
         ivUserImg.setImageBitmap(loggedUser.getImg());
 
@@ -191,8 +214,9 @@ public class HomeFragment extends Fragment {
                 builder.setTitle(getString(R.string.home_dialog_title));
 
                 builder.setItems(options, new DialogInterface.OnClickListener() {
+                    @SuppressLint("StaticFieldLeak")
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                    public void onClick(final DialogInterface dialog, int which) {
                         if (options[which].equals(getString(R.string.home_dialog_option_1))) {
                             Intent intent = new Intent(view.getContext(), AddFoodActivity.class);
                             Bundle bundle = new Bundle();
@@ -201,7 +225,81 @@ public class HomeFragment extends Fragment {
                             intent.putExtras(bundle);
                             startActivityForResult(intent, ADD_FOOD_REQUEST);
                         } else if (options[which].equals(getString(R.string.home_dialog_option_2))) {
-                            //TODO: Implement
+                            progressBar.setVisibility(View.VISIBLE);
+                            new AsyncTask<Void, Void, List<FoodItem>>() {
+                                @Override
+                                protected List<FoodItem> doInBackground(Void... voids) {
+                                    return AppDatabase.getInstance(getContext()).foodItemDao().getAllFoodItems();
+                                }
+
+                                @Override
+                                protected void onPostExecute(final List<FoodItem> foodItems) {
+                                    foodPick.clear();
+                                    foodPick.addAll(foodItems);
+
+                                    pickDialog = new AlertDialog.Builder(getContext());
+                                    pickDialog.setTitle(getString(R.string.home_pick_dialog_title));
+
+                                    pickView = View.inflate(getContext(), R.layout.home_pick_food_form, null);
+                                    pickDialog.setView(pickView);
+
+                                    lvPickForm = pickView.findViewById(R.id.home_pick_food_form_lv);
+                                    FoodListAdapter adapterPick = new FoodListAdapter(getContext(), foodPick);
+                                    lvPickForm.setAdapter(adapterPick);
+
+                                    final AlertDialog alertDialogPick = pickDialog.create();
+
+                                    lvPickForm.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                        @Override
+                                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                            FoodItem foodPicked = foodItems.get(position);
+                                            addFoodOnActiveList(foodPicked);
+
+                                            FoodListAdapter adapter = (FoodListAdapter) lvFood.getAdapter();
+                                            adapter.notifyDataSetChanged();
+                                            UTIL.setListViewHeightBasedOnChildren(lvFood);
+                                            getDataForCategory();
+
+                                            // add to database
+                                            // TODO: not that good logic
+                                            new AsyncTask<FoodItem, Void, Long>() {
+
+                                                @Override
+                                                protected Long doInBackground(FoodItem... foodItems) {
+                                                    long maxId = AppDatabase.getInstance(getContext()).foodItemDao().getMaxId();
+                                                    foodItems[0].setId(maxId + 1);
+                                                    foodItems[0].setType(getCurrentFoodType());
+                                                    foodItems[0].setDate(MainActivity.TODAY);
+
+                                                    long id = AppDatabase.getInstance(getContext()).foodItemDao().insertFoodItem(foodItems[0]);
+
+                                                    for (Ingredient i : foodItems[0].getIngredients()) {
+                                                        i.setFoodId(foodItems[0].getId());
+                                                        // add ingredient to db
+                                                        AppDatabase.getInstance(getContext()).ingredientDao().insertIngredient(i);
+                                                    }
+
+                                                    return id;
+                                                }
+                                            }.execute(foodPicked);
+
+                                            alertDialogPick.dismiss();
+                                        }
+                                    });
+
+                                    pickDialog.setNegativeButton(getString(R.string.dialog_negative_button_label), new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.cancel();
+                                        }
+                                    });
+
+                                    progressBar.setVisibility(View.VISIBLE);
+
+
+                                    alertDialogPick.show();
+                                }
+                            }.execute();
                         }
                     }
                 });
@@ -244,6 +342,7 @@ public class HomeFragment extends Fragment {
         });
 
         btnDeleteFood.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("StaticFieldLeak")
             @Override
             public void onClick(View v) {
                 final List<FoodItem> toRemove = new ArrayList<>();
@@ -286,69 +385,56 @@ public class HomeFragment extends Fragment {
         });
     }
 
-    private void addDataToChart(PieChart chart, int[] data) {
-        ArrayList<PieEntry> yEntries = new ArrayList<>();
-        ArrayList<String> xEntries = new ArrayList<>();
-        xEntries.add("Calories");
-        xEntries.add("Fats");
-        xEntries.add("Proteins");
-        int[] colors = new int[]{Color.YELLOW, Color.RED, Color.GREEN};
-
-        for (int i = 0; i < data.length; i++) {
-            yEntries.add(new PieEntry(data[i], i));
+    private void getDataForCategory() {
+        int[] data = new int[4];
+        // Get total calories for breakfast
+        for (FoodItem f : foodBreakfast) {
+            data[0] += f.getTotalCalories();
         }
-        PieDataSet pieDataSet = new PieDataSet(yEntries, "Macronutrients");
-        pieDataSet.setSliceSpace(2);
-        pieDataSet.setValueTextSize(12);
-        pieDataSet.setColors(colors);
+        // Get total calories for lunch
+        for (FoodItem f : foodLunch) {
+            data[1] += f.getTotalCalories();
+        }
+        // Get total calories for dinner
+        for (FoodItem f : foodDinner) {
+            data[2] += f.getTotalCalories();
+        }
+        // Get total calories for snacks
+        for (FoodItem f : foodSnacks) {
+            data[3] += f.getTotalCalories();
+        }
 
-        Legend legend = chart.getLegend();
-        legend.setForm(Legend.LegendForm.SQUARE);
-        legend.setDirection(Legend.LegendDirection.LEFT_TO_RIGHT);
+        List<SliceValue> pieData = new ArrayList<>();
+        pieData.add(
+                new SliceValue(
+                        data[0],
+                        getResources().getColor(R.color.colorBreakfast)
+                ).setLabel(getString(R.string.home_btn_subsection_food_breakfast))
+        );
+        pieData.add(
+                new SliceValue(
+                        data[1],
+                        getResources().getColor(R.color.colorLunch)
+                ).setLabel(getString(R.string.home_btn_subsection_food_lunch)));
+        pieData.add(
+                new SliceValue(
+                        data[2],
+                        getResources().getColor(R.color.colorDinner)
+                ).setLabel(getString(R.string.home_btn_subsection_food_dinner)));
+        pieData.add(
+                new SliceValue(
+                        data[3],
+                        getResources().getColor(R.color.colorSnacks)
+                ).setLabel(getString(R.string.home_btn_subsection_food_snacks)));
 
-        PieData pieData = new PieData(pieDataSet);
-        chart.setData(pieData);
-        chart.invalidate();
+        PieChartData pieChartData = new PieChartData(pieData);
+        pieChartData.setHasLabels(true).setValueLabelTextSize(14);
+        pieChartData.setHasCenterCircle(true).setCenterText1(getString(R.string.home_chart_category_text)).setCenterText1FontSize(9);
 
-        chart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
-            @Override
-            public void onValueSelected(Entry e, Highlight h) {
-
-            }
-
-            @Override
-            public void onNothingSelected() {
-
-            }
-        });
+        pieChartCategory.setPieChartData(pieChartData);
+        pieChartCategory.invalidate();
     }
 
-    private void setupPieCharts() {
-        Description totalDescription = new Description();
-        totalDescription.setText(getString(R.string.home_chart_total_description));
-        pieChartTotal.setDescription(totalDescription);
-        pieChartTotal.setRotationEnabled(true);
-        pieChartTotal.setHoleRadius(25f);
-        pieChartTotal.setTransparentCircleAlpha(0);
-        pieChartTotal.setCenterText(getString(R.string.home_chart_total_center_text));
-        pieChartTotal.setCenterTextSize(10);
-        pieChartTotal.setDrawEntryLabels(true);
-
-        addDataToChart(pieChartTotal, totalDataOverall);
-
-
-        Description todayDescription = new Description();
-        todayDescription.setText(getString(R.string.home_chart_total_description));
-        pieChartToday.setDescription(todayDescription);
-        pieChartToday.setRotationEnabled(true);
-        pieChartToday.setHoleRadius(25f);
-        pieChartToday.setTransparentCircleAlpha(0);
-        pieChartToday.setCenterText(getString(R.string.home_chart_total_center_text));
-        pieChartToday.setCenterTextSize(10);
-        pieChartToday.setDrawEntryLabels(true);
-
-        addDataToChart(pieChartToday, totalDataToday);
-    }
 
     @SuppressLint("StaticFieldLeak")
     private void getDataOverall() {
@@ -372,9 +458,35 @@ public class HomeFragment extends Fragment {
                     }
                 }
 
+
                 totalDataOverall[0] = totalCarbs;
                 totalDataOverall[1] = totalFats;
                 totalDataOverall[2] = totalProteins;
+
+                List<SliceValue> pieData = new ArrayList<>();
+                pieData.add(
+                        new SliceValue(
+                                totalDataOverall[0],
+                                getResources().getColor(R.color.colorCarbohydrates)
+                        ).setLabel(getString(R.string.add_food_ingredients_create_carbohydrates_label))
+                );
+                pieData.add(
+                        new SliceValue(
+                                totalDataOverall[1],
+                                getResources().getColor(R.color.colorFat)
+                        ).setLabel(getString(R.string.add_food_ingredients_create_fat_label)));
+                pieData.add(
+                        new SliceValue(
+                                totalDataOverall[2],
+                                getResources().getColor(R.color.colorProtein)
+                        ).setLabel(getString(R.string.add_food_ingredients_create_protein_label)));
+
+                PieChartData pieChartData = new PieChartData(pieData);
+                pieChartData.setHasLabels(true).setValueLabelTextSize(11);
+                pieChartData.setHasCenterCircle(true).setCenterText1(getString(R.string.home_chart_total_description)).setCenterText1FontSize(9);
+
+                pieChartTotal.setPieChartData(pieChartData);
+                pieChartTotal.invalidate();
             }
         }.execute();
     }
@@ -419,6 +531,31 @@ public class HomeFragment extends Fragment {
         totalDataToday[0] = totalCarbs;
         totalDataToday[1] = totalFats;
         totalDataToday[2] = totalProteins;
+
+
+        List<SliceValue> pieData = new ArrayList<>();
+        pieData.add(
+                new SliceValue(
+                        totalDataToday[0],
+                        getResources().getColor(R.color.colorCarbohydrates)
+                ).setLabel(getString(R.string.add_food_ingredients_create_carbohydrates_label))
+        );
+        pieData.add(
+                new SliceValue(
+                        totalDataToday[1],
+                        getResources().getColor(R.color.colorFat)
+                ).setLabel(getString(R.string.add_food_ingredients_create_fat_label)));
+        pieData.add(
+                new SliceValue(
+                        totalDataToday[2],
+                        getResources().getColor(R.color.colorProtein)
+                ).setLabel(getString(R.string.add_food_ingredients_create_protein_label)));
+
+        PieChartData pieChartData = new PieChartData(pieData);
+        pieChartData.setHasLabels(true).setValueLabelTextSize(14);
+        pieChartData.setHasCenterCircle(true).setCenterText1(getString(R.string.home_chart_today_description)).setCenterText1FontSize(9);
+
+        pieChartToday.setPieChartData(pieChartData);
     }
 
     private void setSelectedItemState(View selected, boolean b) {
@@ -457,6 +594,7 @@ public class HomeFragment extends Fragment {
                 FoodListAdapter adapter = (FoodListAdapter) lvFood.getAdapter();
                 adapter.notifyDataSetChanged();
                 UTIL.setListViewHeightBasedOnChildren(lvFood);
+                getDataForCategory();
             } else if (requestCode == EDIT_USER_REQUEST) {
                 Bundle bundle = data.getExtras();
                 loggedUser = (User) bundle.getParcelable(RegisterActivity.EDITED_USER_KEY);

@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
     private Fragment currentFragment;
     private BottomNavigationView bottomNavigationView;
 
+    private boolean itemsExists = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +63,10 @@ public class MainActivity extends AppCompatActivity {
 
         initComponents();
 
+        openDefaultFragment(savedInstanceState);
+    }
+
+    private void setLists(final boolean openFragment) {
         new AsyncTask<Void, Void, List<FoodItem>>() {
 
             @Override
@@ -72,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             protected void onPostExecute(List<FoodItem> foodItems) {
                 for (FoodItem f : foodItems) {
+                    itemsExists = true;
                     if (f.getType().equals("breakfast")) {
                         foodBreakfast.add(f);
                     } else if (f.getType().equals("lunch")) {
@@ -82,10 +88,12 @@ public class MainActivity extends AppCompatActivity {
                         foodSnacks.add(f);
                     }
                 }
+
+                if (openFragment) {
+                    openFragment();
+                }
             }
         }.execute();
-
-        openDefaultFragment(savedInstanceState);
     }
 
     private void initComponents() {
@@ -101,8 +109,11 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
 
+                    boolean isHome = false;
+
                     switch (menuItem.getItemId()) {
                         case R.id.nav_home:
+                            isHome = true;
                             currentFragment = createHomeFragment();
                             break;
                         case R.id.nav_foodList:
@@ -120,6 +131,13 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     openFragment();
+
+//                    if (!isHome || !itemsExists) {
+//                        openFragment();
+//                    } else {
+//                        setLists(true);
+//                    }
+
                     return true;
                 }
 
@@ -135,7 +153,8 @@ public class MainActivity extends AppCompatActivity {
     private void openDefaultFragment(Bundle savedInstanceState) {
         if (savedInstanceState == null) {
             currentFragment = createHomeFragment();
-            openFragment();
+            setLists(true);
+//            openFragment();
         }
     }
 

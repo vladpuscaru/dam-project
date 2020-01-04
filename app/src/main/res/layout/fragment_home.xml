@@ -22,7 +22,7 @@
             <ImageView
                 android:id="@+id/home_img_user"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:src="@mipmap/ic_launcher_round" />
 
@@ -105,6 +105,7 @@
                 android:id="@+id/home_tv_section_graph_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/app_padding"
                 android:layout_marginBottom="@dimen/app_padding"
                 android:gravity="center"
                 android:text="@string/home_section_graph_title"
@@ -113,45 +114,71 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="vertical">
 
                 <!-- Today -->
                 <LinearLayout
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight=".5"
-                    android:orientation="vertical">
+                    android:orientation="horizontal">
+
+
+                    <lecho.lib.hellocharts.view.PieChartView
+                        android:id="@+id/home_chart_today"
+                        android:layout_height="match_parent"
+                        android:layout_width="match_parent" />
 
                     <TextView
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight=".3"
                         android:gravity="center_horizontal"
                         android:text="@string/home_overall_today_title" />
 
-                    <com.github.mikephil.charting.charts.PieChart
-                        android:id="@+id/home_chart_today"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
 
                 </LinearLayout>
 
                 <!-- Total -->
                 <LinearLayout
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight=".5"
-                    android:orientation="vertical">
+                    android:layout_marginTop="@dimen/activity_vertical_margin"
+                    android:orientation="horizontal">
 
                     <TextView
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight=".3"
                         android:gravity="center_horizontal"
                         android:text="@string/home_overall_total_title" />
 
-                    <com.github.mikephil.charting.charts.PieChart
+                    <lecho.lib.hellocharts.view.PieChartView
                         android:id="@+id/home_chart_total"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent" />
+
+
+                </LinearLayout>
+
+                <!-- Category -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/activity_vertical_margin"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".3"
+                        android:gravity="center_horizontal"
+                        android:text="@string/home_overall_total_title" />
+
+                    <lecho.lib.hellocharts.view.PieChartView
+                        android:id="@+id/home_chart_category"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
 
                 </LinearLayout>
 
@@ -178,7 +205,6 @@
             android:padding="@dimen/home_section_padding"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/home_divider_2">
-
 
             <TextView
                 android:id="@+id/home_tv_section_2_title"
@@ -294,6 +320,18 @@
             android:background="?android:attr/listDivider"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/home_section_today_track" />
+
+        <ProgressBar
+            android:id="@+id/home_pb"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:visibility="gone" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

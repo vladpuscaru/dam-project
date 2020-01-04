@@ -50,7 +50,7 @@ import java.util.Locale;
 
 public class AddFoodActivity extends AppCompatActivity {
 
-    private class InsertFood extends AsyncTask<FoodItem, Void, Long> {
+    public class InsertFood extends AsyncTask<FoodItem, Void, Long> {
 
         @Override
         protected Long doInBackground(FoodItem... foodItems) {
